@@ -19,7 +19,9 @@ import com.phantask.attendance.repository.AttendanceTokenRepository;
 import com.phantask.attendance.service.IAttendanceService;
 import com.phantask.authentication.entity.User;
 import com.phantask.authentication.repository.UserRepository;
+import com.phantask.exception.AttendanceAlreadyCompletedException;
 import com.phantask.exception.AttendanceAlreadyMarkedException;
+import com.phantask.notification.email.EmailService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,9 @@ public class AttendanceServiceImpl implements IAttendanceService {
     private final AttendanceRepository attendanceRepo;
     private final AttendanceTokenRepository tokenRepo;
     private final UserRepository userRepo;
+    private static final long MIN_SHIFT_MINUTES = 8 * 60; //8-hours
+    private final EmailService emailService;
+
 
     /**
      * Generates a new QR token for the logged-in user to mark attendance.
@@ -101,10 +106,28 @@ public class AttendanceServiceImpl implements IAttendanceService {
             attendance.setCheckInTime(LocalDateTime.now());
             attendance.setStatus(AttendanceStatus.CHECKED_IN);
         } else if (attendance.getCheckOutTime() == null) {
-            attendance.setCheckOutTime(LocalDateTime.now());
-            attendance.setStatus(AttendanceStatus.CHECKED_OUT);
+        	
+        	LocalDateTime now = LocalDateTime.now();
+            attendance.setCheckOutTime(now);
+
+            long workedMinutes = java.time.Duration
+                    .between(attendance.getCheckInTime(), now)
+                    .toMinutes();
+
+            if (workedMinutes >= MIN_SHIFT_MINUTES) {
+                attendance.setStatus(AttendanceStatus.CHECKED_OUT);
+            } else {
+                // 🔔 Trigger mail
+            	emailService.sendEarlyCheckoutAlert(
+                        "phantask@zohomail.in", // assumes manager mapping
+                        user.getUsername(),
+                        attendance.getCheckInTime(),
+                        now,
+                        workedMinutes
+                );
+            }
         } else {
-            throw new RuntimeException("Attendance already completed");
+        	throw new AttendanceAlreadyCompletedException("Attendance already completed");
         }
 
         attendanceToken.setUsed(true);
@@ -252,5 +275,5 @@ public class AttendanceServiceImpl implements IAttendanceService {
                 Math.round(percentage * 100.0) / 100.0
         );
     }
-
+    
 }

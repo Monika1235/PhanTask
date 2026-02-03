@@ -10,7 +10,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(AccountDeactivatedException.class)
@@ -39,6 +42,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(body);
+    }
+	
+	@ExceptionHandler(AttendanceAlreadyCompletedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAttendanceAlreadyCompleted(
+            AttendanceAlreadyCompletedException ex) {
+
+        log.warn("Attendance error: {}", ex.getMessage());
+
+        ApiErrorResponse response = new ApiErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
     }
 	
 }
