@@ -64,6 +64,24 @@ Frontend runs on:
 ----------------
 👉 http://localhost:5173 (default Vite port)
 
+🌐 Running Frontend with Private IP (Multi-Device Support)
+----------------------------------------------------------
+Phantask’s frontend can be configured to run using a private IP address, allowing access from multiple devices (mobile, tablet, other laptops) on the same network 📱💻🌐.
+This is especially useful for real-world testing and demos.
+
+👉 Find your private IP:
+-----------------------
+Linux / macOS: ip a or ifconfig
+Windows: ipconfig
+
+Expose Vite Dev Server to Network
+---------------------------------
+Vite runs on localhost by default. To allow other devices to access it, expose the dev server using the --host flag.
+npm run dev -- --host
+
+🚀 Now the frontend is accessible via:
+http://192.168.1.10:5173
+
 🔗 How Frontend & Backend Work Together
 ---------------------------------------
 💡 The magic happens here:
