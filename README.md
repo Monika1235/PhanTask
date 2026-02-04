@@ -104,3 +104,6 @@ Both applications can run:
 5. Perfect for learning and showcasing skills 💼
 
 Phantask isn’t just a project — it’s a production-style full-stack experience.
+
+Built with care and real-world practices.
+If Phantask added value to you, don’t forget to ⭐ the repository!
