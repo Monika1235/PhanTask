@@ -9,16 +9,16 @@ The backend is the brain of Phantask 🧠 — handling authentication, authoriza
 
 ⚙️ Tech Stack
 -------------
-Java + Spring Boot
-Spring Security (JWT-based authentication 🔐)
-RESTful APIs
-JPA / Hibernate
-MySQL / PostgreSQL (configurable)
+1. Java + Spring Boot
+2. Spring Security (JWT-based authentication 🔐)
+3. RESTful APIs
+4. JPA / Hibernate
+5. MySQL / PostgreSQL (configurable)
 
 ▶️ How to Run the Backend
 -------------------------
-Navigate to the backend project directory
-Configure your database credentials in application.properties
+1. Navigate to the backend project directory
+2. Configure your database credentials in application.properties
 
 Run the application:
 --------------------
@@ -27,12 +27,13 @@ or directly from your IDE ▶️
 
 🌐 Backend Highlights
 ---------------------
-Secure login & role-based access (ADMIN / USER)
-Clean layered architecture (Controller → Service → Repository)
-DTO-based responses for safe data transfer
-Stateless JWT authentication for scalability 🚀
+1. Secure login & role-based access (ADMIN / USER)
+2. Clean layered architecture (Controller → Service → Repository)
+3. DTO-based responses for safe data transfer
+4. Stateless JWT authentication for scalability 🚀
 
 Once started, the backend runs on:
+---------------------------------
 👉 http://localhost:8080
 
 🎨 Frontend Execution (React)
@@ -41,25 +42,23 @@ The frontend is where Phantask comes to life ✨ — fast, responsive, and user-
 
 ⚙️ Tech Stack
 -------------
-React
-Vite (⚡ lightning-fast dev server)
-Axios for API calls
-Modern component-based UI
+1. React
+2. Vite (⚡ lightning-fast dev server)
+3. Axios for API calls
+4. Modern component-based UI
 
 ▶️ How to Run the Frontend
 --------------------------
-Navigate to the frontend project directory
-Install dependencies:
-npm install
-Start the development server:
-npm run dev
+1. Navigate to the frontend project directory
+2. Install dependencies: npm install
+3. Start the development server: npm run dev
 
 🌟 Frontend Highlights
 ----------------------
-Clean and responsive UI 📱💻
-Real-time interaction with backend APIs
-Secure token-based communication
-Smooth UX designed for productivity
+1. Clean and responsive UI 📱💻
+2. Real-time interaction with backend APIs
+3. Secure token-based communication
+4. Smooth UX designed for productivity
 
 Frontend runs on:
 ----------------
@@ -68,10 +67,10 @@ Frontend runs on:
 🔗 How Frontend & Backend Work Together
 ---------------------------------------
 💡 The magic happens here:
-React sends API requests using Axios
-Spring Boot validates JWT tokens 🔐
-Backend responds with structured JSON data
-Frontend updates UI instantly ⚡
+1. React sends API requests using Axios
+2. Spring Boot validates JWT tokens 🔐
+3. Backend responds with structured JSON data
+4. Frontend updates UI instantly ⚡
 
 Both applications can run:
 -------------------------
@@ -80,10 +79,10 @@ Both applications can run:
 
 🏆 Why Phantask?
 ----------------
-✔ Real-world full-stack architecture
-✔ Secure and scalable backend
-✔ Modern frontend workflow
-✔ Easy to run, easy to extend
-✔ Perfect for learning and showcasing skills 💼
+1. Real-world full-stack architecture
+2. Secure and scalable backend
+3. Modern frontend workflow
+4. Easy to run, easy to extend
+5. Perfect for learning and showcasing skills 💼
 
 Phantask isn’t just a project — it’s a production-style full-stack experience.
