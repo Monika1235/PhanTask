@@ -35,9 +35,38 @@ Stateless JWT authentication for scalability 🚀
 Once started, the backend runs on:
 👉 http://localhost:8080
 
+🎨 Frontend Execution (React)
+-----------------------------
+The frontend is where Phantask comes to life ✨ — fast, responsive, and user-friendly.
+
+⚙️ Tech Stack
+-------------
+React
+Vite (⚡ lightning-fast dev server)
+Axios for API calls
+Modern component-based UI
+
+▶️ How to Run the Frontend
+--------------------------
+Navigate to the frontend project directory
+Install dependencies:
+npm install
+Start the development server:
+npm run dev
+
+🌟 Frontend Highlights
+----------------------
+Clean and responsive UI 📱💻
+Real-time interaction with backend APIs
+Secure token-based communication
+Smooth UX designed for productivity
+
+Frontend runs on:
+----------------
+👉 http://localhost:5173 (default Vite port)
+
 🔗 How Frontend & Backend Work Together
 ---------------------------------------
-
 💡 The magic happens here:
 React sends API requests using Axios
 Spring Boot validates JWT tokens 🔐
@@ -46,8 +75,8 @@ Frontend updates UI instantly ⚡
 
 Both applications can run:
 -------------------------
-On the same machine
-On different devices (as long as they’re on the same network 🌐)
+1. On the same machine
+2. On different devices (as long as they’re on the same network 🌐)
 
 🏆 Why Phantask?
 ----------------
