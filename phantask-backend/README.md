@@ -359,3 +359,237 @@ Output:
         ],
         "enabled": true
     }]
+    
+Use Case 8: Generate Attendance QR Code
+---------------------------------------
+Title: User generates QR code from Attendance Page
+
+Actors:
+------
+Primary Actor: Any User other than Admin
+
+Preconditions:
+-------------
+User is logged in with a valid JWT token.
+User account is enabled.
+Attendance for the current day is not already completed.
+Backend service is running.
+
+Postconditions:
+---------------
+A new QR token is generated on the UI.
+QR token is stored in the backend with:
+user
+date
+expiry time
+used = false
+Any previously active QR token for the day is invalidated.
+
+Description / Flow:
+------------------
+User logs in (mobile or laptop).
+User opens the Attendance page.
+System generates a random QR token on the UI.
+UI sends the QR token to the backend for registration.
+Backend validates user and attendance state.
+Backend stores the QR token with a short expiry.
+
+API Details:
+------------
+Endpoint
+POST /api/attendance/token/register
+
+Headers
+Authorization: Bearer <JWT_TOKEN>
+
+Request Body
+{
+  "token": "QR-abc123xyz"
+}
+
+Expected Result:
+---------------
+QR code is visible on UI.
+Token expires after configured time (e.g., 5 minutes).
+
+Use Case 9: Mark Attendance (Check-In / Check-Out)
+--------------------------------------------------
+Title: User marks attendance by scanning QR code
+
+Actors:
+-------
+Primary Actor: User (Employee)
+Secondary Actor: Admin / HR (monitoring)
+
+Preconditions:
+-------------
+QR token is valid and not expired.
+User is logged in on mobile device.
+Camera access is granted (HTTPS or localhost).
+QR token has not been used before.
+
+Postconditions:
+---------------
+First scan → user is checked in
+Second scan → user is checked out
+Attendance record is created or updated
+QR token is marked as used
+
+Description / Flow:
+-------------------
+First Scan (Check-In)
+
+User opens QR scanner on laptop.
+User scans the QR code shown on mobile.
+System validates the QR token.
+No attendance exists for today.
+System records check-in time.
+Attendance status is set to CHECKED_IN.
+
+Second Scan (Check-Out)
+
+User scans a new QR code.
+System validates the QR token.
+Existing attendance record is found.
+System calculates worked duration.
+System records check-out time.
+
+Business Rules
+If worked duration ≥ 8 hours → normal checkout.
+If worked duration < 8 hours → early checkout:
+Email notification is sent to manager.
+
+API Details:
+-----------
+Endpoint
+POST /api/attendance/mark
+
+Request Body
+{
+  "token": "QR-abc123xyz"
+}
+
+Possible Responses
+Success (Check-In / Check-Out)
+{
+  "status": "CHECKED_OUT",
+  "checkInTime": "2026-02-04T09:30:00",
+  "checkOutTime": "2026-02-04T18:10:00"
+}
+
+Error – Attendance Already Completed
+{
+  "status": 409,
+  "message": "Attendance already completed for today"
+}
+
+Use Case 10: Early Checkout Notification
+----------------------------------------
+Title: System notifies manager on early checkout
+
+Actors:
+------
+Primary Actor: System
+Secondary Actor: Manager
+
+Preconditions:
+-------------
+User attempts checkout before completing 8 hours.
+User has a mapped manager with valid email.
+SMTP configuration is valid.
+
+Postconditions:
+--------------
+Email is sent to the manager.
+
+Description / Flow:
+------------------
+User performs second scan.
+System calculates total worked minutes.
+System detects early checkout.
+System triggers email notification.
+Manager receives early checkout alert.
+
+Sample Email Content
+Subject
+Early Checkout Alert – <Employee Name>
+
+Body
+
+Employee <Name> has checked out early today.
+
+Check-in Time : 09:45 AM
+Check-out Time: 04:20 PM
+Worked Duration: 6h 35m
+Required Duration: 8h
+
+Use Case 11: Get My Attendance Records
+--------------------------------------
+Title:User retrieves own attendance history
+
+Actors:
+------
+Primary Actor: User
+
+Preconditions:
+--------------
+User is logged in.
+User has attendance records.
+
+Postconditions:
+---------------
+System returns attendance records for the logged-in user.
+
+API Details
+-----------
+Endpoint
+GET /api/attendance/my
+
+Headers
+Authorization: Bearer <JWT_TOKEN>
+
+Use Case 12: System Marks Absent Users
+--------------------------------------
+Title: System marks absent users automatically
+
+Actors:
+------
+Primary Actor: System (Scheduler)
+
+Preconditions:
+--------------
+Time is 11:05 PM (configured cron job).
+User has no attendance record for the day.
+
+Postconditions:
+--------------
+Attendance record is created with status ABSENT.
+
+Description / Flow:
+-------------------
+Scheduled job runs daily.
+System fetches all active users.
+Users without attendance records are marked absent.
+Records are saved in database.
+
+Testing Scenario (Two Devices):
+-------------------------------
+
+Device 1: Admin (Laptop)
+------------------------
+Scans QR code
+Camera access via HTTPS / localhost
+Marks check-in and check-out
+Receives early checkout alerts (manager role)
+
+Device 2: User (Mobile):
+-----------------------
+Generates QR code
+Monitors attendance
+
+Authorization Rules:
+-------------------
+Attendance marking requires valid QR token.
+Attendance data access is restricted to logged-in users.
+Admin-only endpoints are protected by role checks.
+    
