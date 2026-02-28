@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,8 @@ import com.phantask.authentication.dto.PasswordChangeRequest;
 import com.phantask.authentication.dto.UpdateProfileRequest;
 import com.phantask.authentication.dto.UserProfileResponse;
 import com.phantask.authentication.dto.UserResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.phantask.authentication.dto.AccountCreatedEvent;
 import com.phantask.authentication.entity.Role;
 import com.phantask.authentication.entity.User;
 import com.phantask.authentication.entity.UserProfile;
@@ -29,7 +32,7 @@ import com.phantask.authentication.repository.RoleRepository;
 import com.phantask.authentication.repository.UserProfileRepository;
 import com.phantask.authentication.repository.UserRepository;
 import com.phantask.authentication.service.api.IUserService;
-import com.phantask.notification.email.EmailService;
+//import com.phantask.notification.email.EmailService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,8 +64,10 @@ public class UserService implements IUserService {
     private final RoleRepository roleRepo;
     private final UserProfileRepository profileRepo;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
-
+    //private final EmailService emailService;
+    private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
+    
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = userRepo.findByUsername(username)
@@ -118,11 +123,22 @@ public class UserService implements IUserService {
         log.info("Account created: username={}, role={}", username, normalizedRole);
 
         try {
-        	//for testing purpose
-            emailService.sendAccountCreationEmail("phantask@zohomail.in", username, tempPassword);
+
+            AccountCreatedEvent event =
+                    new AccountCreatedEvent("phantask@zohomail.in", username, tempPassword);
+
+            String json = objectMapper.writeValueAsString(event);
+
+            rabbitTemplate.convertAndSend(
+                    "account.exchange",
+                    "account.created",
+                    json
+            );
+
         } catch (Exception e) {
             log.error("Email sending failed", e);
         }
+        
         return new AccountCreationResponse(username,
                 "User account created successfully. Temporary password is " + tempPassword);
     }
