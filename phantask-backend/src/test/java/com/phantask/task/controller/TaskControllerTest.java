@@ -46,15 +46,13 @@ import com.phantask.task.dto.TaskResponse;
 import com.phantask.task.service.TaskService;
 import com.phantask.authentication.security.JwtUtil;
 import com.phantask.authentication.security.JwtFilter;
-import com.phantask.authentication.security.SecurityConfig;
 
 /**
  * Integration tests for TaskController
  * Tests both admin operations (CRUD) and employee operations (view/submit)
  */
 @WebMvcTest(TaskController.class)
-@AutoConfigureMockMvc
-@Import({SecurityConfig.class, TaskControllerTest.TestSecurityConfig.class})
+@AutoConfigureMockMvc(addFilters = false)
 class TaskControllerTest {
 
     @Autowired
@@ -65,12 +63,6 @@ class TaskControllerTest {
 
     @MockBean
     private TaskService taskService;
-
-    @MockBean
-    private JwtUtil jwtUtil;
-
-    @MockBean
-    private JwtFilter jwtFilter;
 
     private AdminTaskDTO adminTaskDTO;
     private EmployeeTaskDTO employeeTaskDTO;
@@ -458,10 +450,5 @@ class TaskControllerTest {
                 .andExpect(status().isForbidden());
 
         verify(taskService, never()).submitTask(anyLong(), any(EmployeeTaskDTO.class), anyString());
-    }
-
-    @TestConfiguration
-    @EnableMethodSecurity
-    static class TestSecurityConfig {
     }
 }
