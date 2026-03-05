@@ -48,7 +48,7 @@ import com.phantask.authentication.security.JwtFilter;
  * Tests both admin operations (CRUD) and employee operations (view/submit)
  */
 @WebMvcTest(TaskController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class TaskControllerTest {
 
     @Autowired
