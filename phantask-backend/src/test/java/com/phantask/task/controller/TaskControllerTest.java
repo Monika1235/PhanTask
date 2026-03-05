@@ -389,6 +389,7 @@ class TaskControllerTest {
 
         // Act & Assert
         mockMvc.perform(get("/api/tasks/my/submitted"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].status").value("SUBMITTED"))
                 .andExpect(jsonPath("$.length()").value(1));
