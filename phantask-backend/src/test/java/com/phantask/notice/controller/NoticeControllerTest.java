@@ -65,6 +65,12 @@ class NoticeControllerTest {
     private NoticeResponse noticeResponse;
     private List<NoticeResponse> noticeResponseList;
 
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
     @BeforeEach
     void setUp() {
         //reset(noticeService);
