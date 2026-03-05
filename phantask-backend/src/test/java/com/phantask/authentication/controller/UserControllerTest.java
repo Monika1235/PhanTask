@@ -1,5 +1,7 @@
 package com.phantask.authentication.controller;
 
+import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.TestConfiguration;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -31,6 +33,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.authentication.dto.AccountCreationResponse;
@@ -41,12 +44,15 @@ import com.phantask.authentication.dto.UpdateProfileRequest;
 import com.phantask.authentication.dto.UserProfileResponse;
 import com.phantask.authentication.dto.UserResponse;
 import com.phantask.authentication.service.api.IUserService;
+import com.phantask.authentication.security.JwtFilter;
+import com.phantask.authentication.security.JwtUtil;
+import com.phantask.config.TestSecurityConfig;
 
 /**
  * Integration tests for UserController
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(UserControllerTest.class)
+@Import(TestSecurityConfig.class)
 class UserControllerTest {
 
     @Autowired
@@ -64,9 +70,15 @@ class UserControllerTest {
     private List<UserResponse> activeUsers;
     private List<UserResponse> inactiveUsers;
 
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+    
     @BeforeEach
     void setUp() {
-        reset(userService);
+        //reset(userService);
 
         // Setup register request
         registerRequest = new RegisterRequest();
