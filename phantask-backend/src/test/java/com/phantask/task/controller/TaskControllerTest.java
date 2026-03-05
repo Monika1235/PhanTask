@@ -33,6 +33,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.task.dto.AdminTaskDTO;
@@ -44,7 +45,7 @@ import com.phantask.task.service.TaskService;
  * Integration tests for TaskController
  * Tests both admin operations (CRUD) and employee operations (view/submit)
  */
-@SpringBootTest
+@WebMvcTest(TaskController.class)
 @AutoConfigureMockMvc
 class TaskControllerTest {
 
