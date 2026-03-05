@@ -60,8 +60,12 @@ class NoticeControllerTest {
 
     @MockBean
     private NoticeService noticeService;
-    @MockBean JwtFilter;
-    @MockBean JwtUtil;
+    
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private JwtUtil jwtUtil;
     
     private CreateNoticeDTO createNoticeDTO;
     private NoticeResponse noticeResponse;
