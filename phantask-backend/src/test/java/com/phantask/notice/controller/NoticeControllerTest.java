@@ -48,7 +48,7 @@ import com.phantask.authentication.security.JwtUtil;
  * Tests both admin operations (CRUD) and user operations (view by role/priority)
  */
 @WebMvcTest(NoticeController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 @Import(NoticeControllerTest.TestSecurityConfig.class)
 class NoticeControllerTest {
 
