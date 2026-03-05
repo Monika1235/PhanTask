@@ -1,5 +1,6 @@
 package com.phantask.task.controller;
 
+import org.springframework.context.annotation.Import;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -28,24 +29,30 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.boot.test.context.TestConfiguration;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.task.dto.AdminTaskDTO;
 import com.phantask.task.dto.EmployeeTaskDTO;
 import com.phantask.task.dto.TaskResponse;
 import com.phantask.task.service.TaskService;
+import com.phantask.authentication.security.JwtUtil;
+import com.phantask.authentication.security.JwtFilter;
 
 /**
  * Integration tests for TaskController
  * Tests both admin operations (CRUD) and employee operations (view/submit)
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(TaskController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class TaskControllerTest {
 
     @Autowired
@@ -64,7 +71,7 @@ class TaskControllerTest {
 
     @BeforeEach
     void setUp() {
-        reset(taskService);
+        //reset(taskService);
 
         // Setup admin task DTO
         adminTaskDTO = new AdminTaskDTO();
@@ -375,6 +382,7 @@ class TaskControllerTest {
 
         // Act & Assert
         mockMvc.perform(get("/api/tasks/my/submitted"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].status").value("SUBMITTED"))
                 .andExpect(jsonPath("$.length()").value(1));

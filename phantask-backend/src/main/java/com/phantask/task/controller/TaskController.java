@@ -107,6 +107,10 @@ public class TaskController {
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<TaskResponse> submitTask(@PathVariable Long id, @RequestBody EmployeeTaskDTO dto,
 			Authentication auth) {
+		
+		if (auth == null) {
+         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 		String username = auth.getName();
 		TaskResponse resp = taskService.submitTask(id, dto, username);
 		return ResponseEntity.ok(resp);

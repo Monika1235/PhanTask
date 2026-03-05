@@ -1,5 +1,8 @@
 package com.phantask.notice.controller;
 
+import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -27,23 +30,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.notice.dto.CreateNoticeDTO;
 import com.phantask.notice.dto.NoticeResponse;
 import com.phantask.notice.service.NoticeService;
+import com.phantask.authentication.security.JwtFilter;
+import com.phantask.authentication.security.JwtUtil;
 
 /**
  * Integration tests for NoticeController
  * Tests both admin operations (CRUD) and user operations (view by role/priority)
  */
-@SpringBootTest
+@WebMvcTest(NoticeController.class)
 @AutoConfigureMockMvc
+@Import(NoticeControllerTest.TestSecurityConfig.class)
 class NoticeControllerTest {
 
     @Autowired
@@ -54,14 +60,20 @@ class NoticeControllerTest {
 
     @MockBean
     private NoticeService noticeService;
+    
+    @MockBean
+    private JwtFilter jwtFilter;
 
+    @MockBean
+    private JwtUtil jwtUtil;
+    
     private CreateNoticeDTO createNoticeDTO;
     private NoticeResponse noticeResponse;
     private List<NoticeResponse> noticeResponseList;
 
     @BeforeEach
     void setUp() {
-        reset(noticeService);
+        //reset(noticeService);
 
         // Setup DTO
         createNoticeDTO = new CreateNoticeDTO();
@@ -422,4 +434,10 @@ class NoticeControllerTest {
 
         verify(noticeService).getNoticesByPriorityForUser(anyList(), eq("IMPORTANT"));
     }
+    
+    @TestConfiguration
+    @EnableMethodSecurity(prePostEnabled = true)
+    static class TestSecurityConfig {
+    }
+    
 }
