@@ -32,6 +32,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.notice.dto.CreateNoticeDTO;
@@ -42,8 +43,8 @@ import com.phantask.notice.service.NoticeService;
  * Integration tests for NoticeController
  * Tests both admin operations (CRUD) and user operations (view by role/priority)
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(NoticeController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class NoticeControllerTest {
 
     @Autowired
