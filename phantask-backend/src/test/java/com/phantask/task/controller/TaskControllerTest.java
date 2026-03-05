@@ -47,6 +47,7 @@ import com.phantask.task.dto.TaskResponse;
 import com.phantask.task.service.TaskService;
 import com.phantask.authentication.security.JwtUtil;
 import com.phantask.authentication.security.JwtFilter;
+import com.phantask.config.TestSecurityConfig;
 
 /**
  * Integration tests for TaskController
