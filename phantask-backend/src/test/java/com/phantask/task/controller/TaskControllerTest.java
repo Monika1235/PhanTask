@@ -52,7 +52,7 @@ import com.phantask.authentication.security.SecurityConfig;
  */
 @WebMvcTest(TaskController.class)
 @AutoConfigureMockMvc
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, TaskControllerTest.TestSecurityConfig.class})
 class TaskControllerTest {
 
     @Autowired
