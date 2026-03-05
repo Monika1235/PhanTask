@@ -14,7 +14,10 @@ public class TestSecurityConfig {
     SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
+            .authorizeHttpRequests(auth -> auth
+                    .anyRequest().authenticated()
+            )
+            .httpBasic();   // ⭐ important for MockMvc tests
 
         return http.build();
     }
