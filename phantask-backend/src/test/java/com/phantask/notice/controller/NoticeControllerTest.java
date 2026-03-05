@@ -62,7 +62,7 @@ class NoticeControllerTest {
 
     @BeforeEach
     void setUp() {
-        reset(noticeService);
+        //reset(noticeService);
 
         // Setup DTO
         createNoticeDTO = new CreateNoticeDTO();
