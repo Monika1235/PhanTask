@@ -42,14 +42,14 @@ import com.phantask.notice.dto.NoticeResponse;
 import com.phantask.notice.service.NoticeService;
 import com.phantask.authentication.security.JwtFilter;
 import com.phantask.authentication.security.JwtUtil;
+import com.phantask.config.TestSecurityConfig;
 
 /**
  * Integration tests for NoticeController
  * Tests both admin operations (CRUD) and user operations (view by role/priority)
  */
 @WebMvcTest(NoticeController.class)
-@AutoConfigureMockMvc
-@Import(NoticeControllerTest.TestSecurityConfig.class)
+@Import(TestSecurityConfig.class)
 class NoticeControllerTest {
 
     @Autowired
@@ -60,12 +60,6 @@ class NoticeControllerTest {
 
     @MockBean
     private NoticeService noticeService;
-    
-    @MockBean
-    private JwtFilter jwtFilter;
-
-    @MockBean
-    private JwtUtil jwtUtil;
     
     private CreateNoticeDTO createNoticeDTO;
     private NoticeResponse noticeResponse;
@@ -433,11 +427,6 @@ class NoticeControllerTest {
                 .andExpect(status().isOk());
 
         verify(noticeService).getNoticesByPriorityForUser(anyList(), eq("IMPORTANT"));
-    }
-    
-    @TestConfiguration
-    @EnableMethodSecurity(prePostEnabled = true)
-    static class TestSecurityConfig {
     }
     
 }
