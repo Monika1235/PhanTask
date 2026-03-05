@@ -51,7 +51,7 @@ import com.phantask.config.TestSecurityConfig;
 /**
  * Integration tests for UserController
  */
-@WebMvcTest(UserControllerTest.class)
+@WebMvcTest(UserController.class)
 @Import(TestSecurityConfig.class)
 class UserControllerTest {
 
