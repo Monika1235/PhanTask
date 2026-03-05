@@ -44,6 +44,7 @@ import com.phantask.task.dto.TaskResponse;
 import com.phantask.task.service.TaskService;
 import com.phantask.authentication.security.JwtUtil;
 import com.phantask.authentication.security.JwtFilter;
+import com.phantask.authentication.security.SecurityConfig;
 
 /**
  * Integration tests for TaskController
@@ -51,6 +52,7 @@ import com.phantask.authentication.security.JwtFilter;
  */
 @WebMvcTest(TaskController.class)
 @AutoConfigureMockMvc
+@Import(SecurityConfig.class)
 class TaskControllerTest {
 
     @Autowired
