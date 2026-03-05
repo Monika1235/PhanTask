@@ -40,6 +40,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.notice.dto.CreateNoticeDTO;
 import com.phantask.notice.dto.NoticeResponse;
 import com.phantask.notice.service.NoticeService;
+import com.phantask.authentication.security.JwtFilter;
+import com.phantask.authentication.security.JwtUtil;
 
 /**
  * Integration tests for NoticeController
@@ -58,7 +60,9 @@ class NoticeControllerTest {
 
     @MockBean
     private NoticeService noticeService;
-
+    @MockBean JwtFilter;
+    @MockBean JwtUtil;
+    
     private CreateNoticeDTO createNoticeDTO;
     private NoticeResponse noticeResponse;
     private List<NoticeResponse> noticeResponseList;
