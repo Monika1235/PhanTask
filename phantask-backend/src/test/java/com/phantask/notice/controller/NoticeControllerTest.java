@@ -436,7 +436,7 @@ class NoticeControllerTest {
     }
     
     @TestConfiguration
-    @EnableMethodSecurity
+    @EnableMethodSecurity(prePostEnabled = true)
     static class TestSecurityConfig {
     }
     
