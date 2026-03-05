@@ -29,3 +29,14 @@ jobs:
         cache: maven
     - name: Build backend
       run: mvn -B package --file phantask-backend/pom.xml -DskipTests
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+       node-version: '18'
+
+    - name: Build frontend
+      run: |
+       cd phantask-frontend
+       npm install
+       npm run build
