@@ -40,6 +40,8 @@ import com.phantask.task.dto.AdminTaskDTO;
 import com.phantask.task.dto.EmployeeTaskDTO;
 import com.phantask.task.dto.TaskResponse;
 import com.phantask.task.service.TaskService;
+import com.phantask.authentication.security.JwtUtil;
+import com.phantask.authentication.security.JwtFilter;
 
 /**
  * Integration tests for TaskController
@@ -57,6 +59,12 @@ class TaskControllerTest {
 
     @MockBean
     private TaskService taskService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    @MockBean
+    private JwtFilter jwtFilter;
 
     private AdminTaskDTO adminTaskDTO;
     private EmployeeTaskDTO employeeTaskDTO;
