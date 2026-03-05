@@ -1,5 +1,8 @@
 package com.phantask.notice.controller;
 
+import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -27,7 +30,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -45,6 +47,7 @@ import com.phantask.notice.service.NoticeService;
  */
 @WebMvcTest(NoticeController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@Import(NoticeControllerTest.TestSecurityConfig.class)
 class NoticeControllerTest {
 
     @Autowired
@@ -423,4 +426,10 @@ class NoticeControllerTest {
 
         verify(noticeService).getNoticesByPriorityForUser(anyList(), eq("IMPORTANT"));
     }
+    
+    @TestConfiguration
+    @EnableMethodSecurity
+    static class TestSecurityConfig {
+    }
+    
 }
