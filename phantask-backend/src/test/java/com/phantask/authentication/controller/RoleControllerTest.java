@@ -137,7 +137,7 @@ class RoleControllerTest {
     }
 
     @Test
-    void addRole_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void addRole_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Arrange
         Map<String, String> request = Map.of("roleName", "EDITOR");
 
@@ -147,7 +147,7 @@ class RoleControllerTest {
                 .with(anonymous())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(roleService, never()).addRole(anyString());
     }
@@ -246,10 +246,11 @@ class RoleControllerTest {
     }
 
     @Test
-    void getAllRoles_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void getAllRoles_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(get("/api/roles/all"))
-                .andExpect(status().isForbidden());
+                .with(anonymous())
+                .andExpect(status().isUnauthorized());
 
         verify(roleService, never()).getAllRoles();
     }
