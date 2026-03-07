@@ -40,8 +40,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 /**
  * Unit tests for RoleController
  */
-@WebMvcTest(value = RoleController.class, 
-            useDefaultFilters = false)  // Force web slice
+@WebMvcTest(RoleController.class)
 @Import(TestSecurityConfig.class)
 class RoleControllerTest {
 
