@@ -53,11 +53,11 @@ class RoleControllerTest {
     @MockitoBean
     private IRoleService roleService;
 
-    @MockitoBean
-    private JwtFilter jwtFilter;
+    //@MockitoBean
+    //private JwtFilter jwtFilter;
 
-    @MockitoBean
-    private JwtUtil jwtUtil;
+    //@MockitoBean
+    //private JwtUtil jwtUtil;
     
     @BeforeEach
     void setUp() {
