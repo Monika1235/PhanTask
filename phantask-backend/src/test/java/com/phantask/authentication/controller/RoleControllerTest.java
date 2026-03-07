@@ -248,7 +248,7 @@ class RoleControllerTest {
     @Test
     void getAllRoles_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
-        mockMvc.perform(get("/api/roles/all"))
+        mockMvc.perform(get("/api/roles/all")
                 .with(anonymous()))
                 .andExpect(status().isUnauthorized());
 
