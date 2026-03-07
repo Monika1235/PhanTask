@@ -1,5 +1,6 @@
 package com.phantask.authentication.controller;
 
+import org.springframework.context.annotation.Import;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -30,12 +31,16 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.authentication.service.api.IRoleService;
+import com.phantask.authentication.security.JwtFilter;
+import com.phantask.authentication.security.JwtUtil;
+import com.phantask.config.TestSecurityConfig;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 /**
  * Integration tests for RoleController
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(RoleController.class)
+@Import(TestSecurityConfig.class)
 class RoleControllerTest {
 
     @Autowired
@@ -47,6 +52,12 @@ class RoleControllerTest {
     @MockBean
     private IRoleService roleService;
 
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+    
     @BeforeEach
     void setUp() {
         reset(roleService);
