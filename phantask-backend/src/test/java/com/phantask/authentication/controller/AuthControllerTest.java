@@ -58,11 +58,11 @@ class AuthControllerTest {
     private LoginRequest loginRequest;
     private Map<String, Object> loginResponse;
 
-    //@MockBean
-    //private JwtFilter jwtFilter;
+    @MockBean
+    private JwtFilter jwtFilter;
 
-    //@MockBean
-    //private JwtUtil jwtUtil;
+    @MockBean
+    private JwtUtil jwtUtil;
 
     @BeforeEach
     void setUp() {
