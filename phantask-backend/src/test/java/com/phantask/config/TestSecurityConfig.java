@@ -10,16 +10,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class TestSecurityConfig {
 
-    @Bean
-    SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
+   @Bean
+   SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()   // ⭐ allow login
-                .anyRequest().authenticated()
+            .requestMatchers("/api/auth/**").permitAll()
+            .anyRequest().authenticated()
+        )
+        .exceptionHandling(e -> e
+            .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN))
         )
         .httpBasic();
-
     return http.build();
   }
 }
