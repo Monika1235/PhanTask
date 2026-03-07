@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 
 import com.phantask.authentication.service.api.IRoleService;
 //import com.phantask.exception.AccessDeniedException;
@@ -73,7 +74,7 @@ public class RoleController {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
             if (auth == null || !auth.isAuthenticated()) {
-              throw new AuthenticationException("Authentication required");
+              throw new InsufficientAuthenticationException("Authentication required");
             }
             
         	boolean isAdmin = auth.getAuthorities()
@@ -118,7 +119,7 @@ public class RoleController {
         try {
         	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth == null || !auth.isAuthenticated()) {
-              throw new AuthenticationException("Authentication required");
+              throw new InsufficientAuthenticationException("Authentication required");
             }
             
             List<String> roles = roleService.getAllRoles();
