@@ -28,8 +28,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -47,12 +45,13 @@ import com.phantask.authentication.service.api.IUserService;
 import com.phantask.authentication.security.JwtFilter;
 import com.phantask.authentication.security.JwtUtil;
 import com.phantask.config.TestSecurityConfig;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 /**
- * Integration tests for UserController
+ * Unit tests for UserController
  */
 @WebMvcTest(UserController.class)
-@Import(TestSecurityConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 class UserControllerTest {
 
     @Autowired
@@ -70,10 +69,10 @@ class UserControllerTest {
     private List<UserResponse> activeUsers;
     private List<UserResponse> inactiveUsers;
 
-    @MockBean
+    @MockitoBean
     private JwtFilter jwtFilter;
 
-    @MockBean
+    @MockitoBean
     private JwtUtil jwtUtil;
     
     @BeforeEach
