@@ -83,7 +83,9 @@ public class RoleController {
             log.info("Role '{}' added successfully", roleName.toUpperCase());
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("message", "Role '" + roleName.toUpperCase() + "' added successfully"));
-        } catch (IllegalArgumentException ex) {
+        } catch (AccessDeniedException e) {
+           throw e;  
+        }catch (IllegalArgumentException ex) {
             log.warn("Failed to add role '{}': {}", roleName, ex.getMessage());
             return ResponseEntity.badRequest()
                     .body(Map.of("error", ex.getMessage()));
@@ -121,7 +123,9 @@ public class RoleController {
             List<String> roles = roleService.getAllRoles();
             log.debug("Retrieved {} roles", roles.size());
             return ResponseEntity.ok(roles);
-        } catch (Exception ex) {
+        }catch (AccessDeniedException e) {
+          throw e;  
+        }catch (Exception ex) {
             log.error("Error retrieving roles: {}", ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
