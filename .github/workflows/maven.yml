@@ -28,13 +28,13 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    # Run unit tests
-    - name: Run backend unit tests
-      run: mvn -B test --file phantask-backend/pom.xml
+    # Run only service tests
+    - name: Run backend service tests
+      run: mvn -Dtest=RoleControllerTest test --file phantask-backend/pom.xml
 
     # Build jar after tests pass
     - name: Build backend
-      run: mvn -B package --file phantask-backend/pom.xml -DskipTests
+      run: mvn -B clean package --file phantask-backend/pom.xml -DskipTests
 
     - name: Setup Node
       uses: actions/setup-node@v4

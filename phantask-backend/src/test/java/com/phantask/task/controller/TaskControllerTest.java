@@ -1,6 +1,7 @@
 package com.phantask.task.controller;
 
 import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.TestConfiguration;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -46,13 +47,14 @@ import com.phantask.task.dto.TaskResponse;
 import com.phantask.task.service.TaskService;
 import com.phantask.authentication.security.JwtUtil;
 import com.phantask.authentication.security.JwtFilter;
+import com.phantask.config.TestSecurityConfig;
 
 /**
  * Integration tests for TaskController
  * Tests both admin operations (CRUD) and employee operations (view/submit)
  */
 @WebMvcTest(TaskController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@Import(TestSecurityConfig.class)
 class TaskControllerTest {
 
     @Autowired
@@ -68,6 +70,12 @@ class TaskControllerTest {
     private EmployeeTaskDTO employeeTaskDTO;
     private TaskResponse taskResponse;
     private List<TaskResponse> taskResponseList;
+
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private JwtUtil jwtUtil;
 
     @BeforeEach
     void setUp() {

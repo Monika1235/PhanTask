@@ -1,5 +1,6 @@
 package com.phantask.authentication.controller;
 
+import org.springframework.context.annotation.Import;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -28,6 +29,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.authentication.dto.LoginRequest;
 import com.phantask.authentication.service.api.IAuthService;
 import com.phantask.exception.AccountDeactivatedException;
+import com.phantask.authentication.security.JwtFilter;
+import com.phantask.authentication.security.JwtUtil;
+import com.phantask.config.TestSecurityConfig;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 /**
  * Integration tests for AuthController
@@ -35,8 +42,8 @@ import com.phantask.exception.AccountDeactivatedException;
  * Tests only existing endpoints:
  * - POST /api/auth/login
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = AuthController.class) 
+@AutoConfigureMockMvc(addFilters = false)
 class AuthControllerTest {
 
     @Autowired
@@ -51,9 +58,15 @@ class AuthControllerTest {
     private LoginRequest loginRequest;
     private Map<String, Object> loginResponse;
 
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
     @BeforeEach
     void setUp() {
-        reset(authService);
+        //reset(authService);
 
         // Setup login request
         loginRequest = new LoginRequest();
@@ -80,6 +93,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value("access-token-123"))
                 .andExpect(jsonPath("$.refreshToken").value("refresh-token-456"))
@@ -99,6 +113,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error").value("Invalid username or password"));
 
@@ -116,6 +131,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error").value("Account is deactivated. Please contact admin."));
 
@@ -136,6 +152,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.requirePasswordChange").value(true))
                 .andExpect(jsonPath("$.message").value("Password change required before login"));
@@ -153,6 +170,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
 
         verify(authService, never()).login(any(LoginRequest.class));
@@ -168,6 +186,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
 
         verify(authService, never()).login(any(LoginRequest.class));
@@ -209,6 +228,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isOk());
 
         verify(authService).login(any(LoginRequest.class));

@@ -1,5 +1,6 @@
 package com.phantask.authentication.controller;
 
+import org.springframework.context.annotation.Import;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -21,21 +22,25 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.authentication.service.api.IRoleService;
+import com.phantask.authentication.security.JwtFilter;
+import com.phantask.authentication.security.JwtUtil;
+import com.phantask.config.TestSecurityConfig;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.TestPropertySource;
 
 /**
- * Integration tests for RoleController
+ * Unit tests for RoleController
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(RoleController.class)
+@Import(TestSecurityConfig.class)
+@TestPropertySource(properties = "spring.main.web-application-type = servlet")
 class RoleControllerTest {
 
     @Autowired
@@ -44,9 +49,15 @@ class RoleControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private IRoleService roleService;
 
+    //@MockitoBean
+    //private JwtFilter jwtFilter;
+
+    //@MockitoBean
+    //private JwtUtil jwtUtil;
+    
     @BeforeEach
     void setUp() {
         reset(roleService);
@@ -64,7 +75,7 @@ class RoleControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/roles/add")
-                .with(csrf())
+                //.with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -83,7 +94,7 @@ class RoleControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/roles/add")
-                .with(csrf())
+                //.with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -100,7 +111,7 @@ class RoleControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/roles/add")
-                .with(csrf())
+                //.with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden());

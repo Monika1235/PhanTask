@@ -1,5 +1,7 @@
 package com.phantask.attendance.controller;
 
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -37,7 +39,9 @@ import com.phantask.attendance.entity.Attendance;
 import com.phantask.attendance.enums.AttendanceStatus;
 import com.phantask.attendance.service.IAttendanceService;
 import com.phantask.authentication.entity.User;
-
+import com.phantask.authentication.security.JwtFilter;
+import com.phantask.authentication.security.JwtUtil;
+import com.phantask.config.TestSecurityConfig;
 import io.jsonwebtoken.ExpiredJwtException;
 
 /**
@@ -46,8 +50,8 @@ import io.jsonwebtoken.ExpiredJwtException;
  * Uses @SpringBootTest with @AutoConfigureMockMvc to properly test
  * controller behavior with security configuration
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(AttendanceController.class)
+@Import(TestSecurityConfig.class)
 class AttendanceControllerTest {
 
     @Autowired
@@ -59,6 +63,12 @@ class AttendanceControllerTest {
     @MockBean
     private IAttendanceService attendanceService;
 
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+    
     private User testUser;
     private Attendance testAttendance;
 
