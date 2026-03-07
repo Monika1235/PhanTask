@@ -5,7 +5,10 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.phantask.authentication.service.api.IRoleService;
+//import com.phantask.exception.AccessDeniedException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +69,16 @@ public class RoleController {
         }
         
         try {
+        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+        	
             roleService.addRole(roleName);
             log.info("Role '{}' added successfully", roleName.toUpperCase());
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -93,6 +107,17 @@ public class RoleController {
     @GetMapping("/all")
     public ResponseEntity<List<String>> getAllRoles() {
         try {
+        	
+        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+        	
             List<String> roles = roleService.getAllRoles();
             log.debug("Retrieved {} roles", roles.size());
             return ResponseEntity.ok(roles);
