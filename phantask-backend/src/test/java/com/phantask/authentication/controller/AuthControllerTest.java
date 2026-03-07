@@ -42,11 +42,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
  * Tests only existing endpoints:
  * - POST /api/auth/login
  */
-@WebMvcTest(
-    controllers = AuthController.class,
-    excludeAutoConfiguration = SecurityAutoConfiguration.class
-)
-@Import(TestSecurityConfig.class)
+@WebMvcTest(AuthController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class AuthControllerTest {
 
     @Autowired
@@ -61,11 +58,11 @@ class AuthControllerTest {
     private LoginRequest loginRequest;
     private Map<String, Object> loginResponse;
 
-    @MockBean
-    private JwtFilter jwtFilter;
+    //@MockBean
+    //private JwtFilter jwtFilter;
 
-    @MockBean
-    private JwtUtil jwtUtil;
+    //@MockBean
+    //private JwtUtil jwtUtil;
 
     @BeforeEach
     void setUp() {
