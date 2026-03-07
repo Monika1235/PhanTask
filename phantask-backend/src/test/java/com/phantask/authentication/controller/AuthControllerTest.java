@@ -34,6 +34,7 @@ import com.phantask.authentication.security.JwtUtil;
 import com.phantask.config.TestSecurityConfig;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 /**
  * Integration tests for AuthController
