@@ -33,6 +33,7 @@ import com.phantask.authentication.security.JwtFilter;
 import com.phantask.authentication.security.JwtUtil;
 import com.phantask.config.TestSecurityConfig;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
  * Integration tests for AuthController
@@ -42,7 +43,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
  */
 @WebMvcTest(AuthController.class)
 @Import(TestSecurityConfig.class)
-@AutoConfigureMockMvc(addFilters = false)
 class AuthControllerTest {
 
     @Autowired
@@ -65,7 +65,7 @@ class AuthControllerTest {
 
     @BeforeEach
     void setUp() {
-        reset(authService);
+        //reset(authService);
 
         // Setup login request
         loginRequest = new LoginRequest();
@@ -92,6 +92,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value("access-token-123"))
                 .andExpect(jsonPath("$.refreshToken").value("refresh-token-456"))
@@ -111,6 +112,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error").value("Invalid username or password"));
 
@@ -128,6 +130,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error").value("Account is deactivated. Please contact admin."));
 
@@ -148,6 +151,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.requirePasswordChange").value(true))
                 .andExpect(jsonPath("$.message").value("Password change required before login"));
@@ -165,6 +169,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
 
         verify(authService, never()).login(any(LoginRequest.class));
@@ -180,6 +185,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
 
         verify(authService, never()).login(any(LoginRequest.class));
@@ -221,6 +227,7 @@ class AuthControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)))
+                .andDo(print())
                 .andExpect(status().isOk());
 
         verify(authService).login(any(LoginRequest.class));
