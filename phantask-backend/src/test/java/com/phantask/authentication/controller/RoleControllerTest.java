@@ -33,7 +33,7 @@ import com.phantask.authentication.security.JwtFilter;
 import com.phantask.authentication.security.JwtUtil;
 import com.phantask.config.TestSecurityConfig;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestPropertySource;
+import org.springframework.test.context.TestPropertySource;
 
 /**
  * Unit tests for RoleController
