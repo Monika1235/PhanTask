@@ -42,7 +42,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
  * Tests only existing endpoints:
  * - POST /api/auth/login
  */
-@WebMvcTest(controllers = RoleController.class) 
+@WebMvcTest(controllers = AuthController.class) 
 @AutoConfigureMockMvc(addFilters = false)
 class AuthControllerTest {
 
