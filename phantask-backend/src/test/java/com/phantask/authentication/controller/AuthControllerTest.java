@@ -1,5 +1,6 @@
 package com.phantask.authentication.controller;
 
+import org.springframework.context.annotation.Import;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -28,6 +29,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantask.authentication.dto.LoginRequest;
 import com.phantask.authentication.service.api.IAuthService;
 import com.phantask.exception.AccountDeactivatedException;
+import com.phantask.authentication.security.JwtFilter;
+import com.phantask.authentication.security.JwtUtil;
+import com.phantask.config.TestSecurityConfig;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 /**
  * Integration tests for AuthController
@@ -35,8 +40,8 @@ import com.phantask.exception.AccountDeactivatedException;
  * Tests only existing endpoints:
  * - POST /api/auth/login
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(AuthController.class)
+@Import(TestSecurityConfig.class)
 class AuthControllerTest {
 
     @Autowired
@@ -50,6 +55,12 @@ class AuthControllerTest {
 
     private LoginRequest loginRequest;
     private Map<String, Object> loginResponse;
+
+    @MockBean
+    private JwtFilter jwtFilter;
+
+    @MockBean
+    private JwtUtil jwtUtil;
 
     @BeforeEach
     void setUp() {
