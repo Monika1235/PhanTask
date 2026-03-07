@@ -69,22 +69,10 @@ public class RoleController {
         }
         
         try {
-        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        	boolean isAdmin = auth.getAuthorities()
-        	        .stream()
-        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-        	if (!isAdmin) {
-        	    throw new AccessDeniedException("Forbidden");
-        	}
-        	
             roleService.addRole(roleName);
             log.info("Role '{}' added successfully", roleName.toUpperCase());
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("message", "Role '" + roleName.toUpperCase() + "' added successfully"));
-        } catch (AccessDeniedException e) {
-           throw e;  
         }catch (IllegalArgumentException ex) {
             log.warn("Failed to add role '{}': {}", roleName, ex.getMessage());
             return ResponseEntity.badRequest()
