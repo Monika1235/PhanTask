@@ -38,10 +38,12 @@ import com.phantask.config.TestSecurityConfig;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 /**
- * Integration tests for RoleController
+ * Unit tests for RoleController
  */
-@WebMvcTest(controllers = RoleController.class) 
+@WebMvcTest(value = RoleController.class, 
+            useDefaultFilters = false)  // Force web slice
 @Import(TestSecurityConfig.class)
+@ContextConfiguration(classes = {RoleController.class, TestSecurityConfig.class})
 class RoleControllerTest {
 
     @Autowired
