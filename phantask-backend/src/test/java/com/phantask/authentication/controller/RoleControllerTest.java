@@ -43,7 +43,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 @WebMvcTest(value = RoleController.class, 
             useDefaultFilters = false)  // Force web slice
 @Import(TestSecurityConfig.class)
-@ContextConfiguration(classes = {RoleController.class, TestSecurityConfig.class})
 class RoleControllerTest {
 
     @Autowired
