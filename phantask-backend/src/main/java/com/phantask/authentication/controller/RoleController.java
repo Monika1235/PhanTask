@@ -72,6 +72,10 @@ public class RoleController {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new AuthenticationException("Authentication required");
+            }
+            
         	boolean isAdmin = auth.getAuthorities()
         	        .stream()
         	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
@@ -112,7 +116,11 @@ public class RoleController {
     @GetMapping("/all")
     public ResponseEntity<List<String>> getAllRoles() {
         try {
-        	
+        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new AuthenticationException("Authentication required");
+            }
+            
             List<String> roles = roleService.getAllRoles();
             log.debug("Retrieved {} roles", roles.size());
             return ResponseEntity.ok(roles);
