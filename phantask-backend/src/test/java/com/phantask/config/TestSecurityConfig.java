@@ -12,13 +12,14 @@ public class TestSecurityConfig {
 
     @Bean
     SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/**").permitAll()
-            )
-            .httpBasic();   // ⭐ important for MockMvc tests
+    http
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()   // ⭐ allow login
+                .anyRequest().authenticated()
+        )
+        .httpBasic();
 
-        return http.build();
-    }
+    return http.build();
+  }
 }
