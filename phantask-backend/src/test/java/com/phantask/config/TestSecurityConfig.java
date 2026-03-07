@@ -15,7 +15,7 @@ public class TestSecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                    .anyRequest().authenticated()
+                    .requestMatchers("/api/auth/**").permitAll()
             )
             .httpBasic();   // ⭐ important for MockMvc tests
 
