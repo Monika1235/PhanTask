@@ -42,6 +42,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
  */
 @WebMvcTest(RoleController.class)
 @Import(TestSecurityConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 class RoleControllerTest {
 
     @Autowired
