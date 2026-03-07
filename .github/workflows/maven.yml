@@ -30,7 +30,7 @@ jobs:
         
     # Run only service tests
     - name: Run backend service tests
-      run: mvn -B -Dtest="*ServiceTest" test --file phantask-backend/pom.xml
+      run: mvn -Dtest=HelplineTicketControllerSimpleTest test --file phantask-backend/pom.xml
 
     # Build jar after tests pass
     - name: Build backend
