@@ -76,7 +76,7 @@ class RoleControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/roles/add")
-                .with(csrf())
+                //.with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -95,7 +95,7 @@ class RoleControllerTest {
 
         // Act & Assert
         mockMvc.perform(post("/api/roles/add")
-                .with(csrf())
+                //.with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
