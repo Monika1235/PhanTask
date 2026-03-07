@@ -69,10 +69,22 @@ public class RoleController {
         }
         
         try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+            
             roleService.addRole(roleName);
             log.info("Role '{}' added successfully", roleName.toUpperCase());
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("message", "Role '" + roleName.toUpperCase() + "' added successfully"));
+        }catch (AccessDeniedException ex) {
+            throw ex;
         }catch (IllegalArgumentException ex) {
             log.warn("Failed to add role '{}': {}", roleName, ex.getMessage());
             return ResponseEntity.badRequest()
@@ -98,21 +110,9 @@ public class RoleController {
     public ResponseEntity<List<String>> getAllRoles() {
         try {
         	
-        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        	boolean isAdmin = auth.getAuthorities()
-        	        .stream()
-        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-        	if (!isAdmin) {
-        	    throw new AccessDeniedException("Forbidden");
-        	}
-        	
             List<String> roles = roleService.getAllRoles();
             log.debug("Retrieved {} roles", roles.size());
             return ResponseEntity.ok(roles);
-        }catch (AccessDeniedException e) {
-          throw e;  
         }catch (Exception ex) {
             log.error("Error retrieving roles: {}", ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
