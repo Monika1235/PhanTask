@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -85,6 +86,8 @@ public class RoleController {
                     .body(Map.of("message", "Role '" + roleName.toUpperCase() + "' added successfully"));
         }catch (AccessDeniedException ex) {
             throw ex;
+        }catch (AuthenticationException ae) {
+            throw ae;
         }catch (IllegalArgumentException ex) {
             log.warn("Failed to add role '{}': {}", roleName, ex.getMessage());
             return ResponseEntity.badRequest()
@@ -113,6 +116,8 @@ public class RoleController {
             List<String> roles = roleService.getAllRoles();
             log.debug("Retrieved {} roles", roles.size());
             return ResponseEntity.ok(roles);
+        }catch (AuthenticationException ae) {
+            throw ae;
         }catch (Exception ex) {
             log.error("Error retrieving roles: {}", ex.getMessage(), ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
