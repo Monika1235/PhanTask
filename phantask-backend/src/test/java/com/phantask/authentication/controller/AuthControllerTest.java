@@ -41,7 +41,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
  * Tests only existing endpoints:
  * - POST /api/auth/login
  */
-@WebMvcTest(AuthController.class)
+@WebMvcTest(
+    controllers = AuthController.class,
+    excludeAutoConfiguration = SecurityAutoConfiguration.class
+)
 @Import(TestSecurityConfig.class)
 class AuthControllerTest {
 
