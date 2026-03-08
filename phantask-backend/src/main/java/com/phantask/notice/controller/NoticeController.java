@@ -85,8 +85,21 @@ public class NoticeController {
 	@PutMapping("/admin/update/{id}")
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<NoticeResponse> updateNotice(@PathVariable Long id, @RequestBody CreateNoticeDTO dto) {
-		NoticeResponse resp = noticeService.updateNotice(id, dto);
-		return ResponseEntity.ok(resp);
+		try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();            
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+			
+			NoticeResponse resp = noticeService.updateNotice(id, dto);
+		    return ResponseEntity.ok(resp);
+		}catch (AccessDeniedException ex) {
+            throw ex;
+        }
 	}
 
 	/**
@@ -127,7 +140,19 @@ public class NoticeController {
 	@GetMapping("/admin/all")
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<List<NoticeResponse>> adminAll() {
-		return ResponseEntity.ok(noticeService.getAllNoticesAdmin());
+		try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();            
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+			return ResponseEntity.ok(noticeService.getAllNoticesAdmin());
+		}catch (AccessDeniedException ex) {
+            throw ex;
+        }		
 	}
 
 	// ===========================================================================================
@@ -158,8 +183,17 @@ public class NoticeController {
 	@GetMapping("/my")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<List<NoticeResponse>> myNotices(Authentication auth) {
-		List<String> roles = getRolesFromAuth(auth);
-		return ResponseEntity.ok(noticeService.getAllNoticesForUser(roles));
+		try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+			}
+			List<String> roles = getRolesFromAuth(auth);
+		    return ResponseEntity.ok(noticeService.getAllNoticesForUser(roles));
+		}catch (AuthenticationException ae) {
+            throw ae;
+        }		
 	}
 
 	/**
@@ -174,7 +208,14 @@ public class NoticeController {
 	public ResponseEntity<List<NoticeResponse>> myNoticesByPriority(
 			@PathVariable String priority,
 			Authentication auth) {
-		List<String> roles = getRolesFromAuth(auth);
-		return ResponseEntity.ok(noticeService.getNoticesByPriorityForUser(roles, priority));
+		try {
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+			}
+			List<String> roles = getRolesFromAuth(auth);
+		    return ResponseEntity.ok(noticeService.getNoticesByPriorityForUser(roles, priority));
+		}catch (AuthenticationException ae) {
+            throw ae;
+        }
 	}
 }
