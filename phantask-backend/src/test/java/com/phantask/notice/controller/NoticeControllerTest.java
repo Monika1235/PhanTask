@@ -139,13 +139,13 @@ class NoticeControllerTest {
     }
 
     @Test
-    void createNotice_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void createNotice_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(post("/api/notices/admin/create")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createNoticeDTO)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(noticeService, never()).createNotice(any(CreateNoticeDTO.class));
     }
