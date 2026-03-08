@@ -216,8 +216,9 @@ public ResponseEntity<String> updateProfileFirstLogin(
 	 * @return 200 OK with the {@link UserProfile} of the authenticated user
 	 */
 	@GetMapping("/profile")
-	public ResponseEntity<UserProfileResponse> getProfile(Authentication auth) {
-		return ResponseEntity.ok(userService.getProfile(auth.getName()));
+	public ResponseEntity<UserProfileResponse> getProfile(@AuthenticationPrincipal UserDetails user) {
+		String username = user.getUsername();
+		return ResponseEntity.ok(userService.getProfile(username));
 	}
 
 	/**
