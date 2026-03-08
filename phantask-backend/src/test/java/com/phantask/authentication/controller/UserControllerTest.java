@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -354,20 +355,20 @@ class UserControllerTest {
 
     // ==================== GET /api/users/profile Tests ====================
 
-    @Test
-    @WithMockUser(username = "testuser")
-    void getProfile_WithValidUser_ShouldReturn200() throws Exception {
-        // Arrange
-        when(userService.getProfile("testuser")).thenReturn(userProfileResponse);
+   @Test
+   void getProfile_WithValidUser_ShouldReturn200() throws Exception {
+      // Arrange
+      when(userService.getProfile("testuser")).thenReturn(userProfileResponse);
 
-        // Act & Assert
-        mockMvc.perform(get("/api/users/profile"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("testuser"))
-                .andExpect(jsonPath("$.email").value("test@example.com"))
-                .andExpect(jsonPath("$.fullName").value("Test User"));
+      // Act & Assert
+      mockMvc.perform(get("/api/users/profile")
+            .with(user("testuser")))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username").value("testuser"))
+            .andExpect(jsonPath("$.email").value("test@example.com"))
+            .andExpect(jsonPath("$.fullName").value("Test User"));
 
-        verify(userService).getProfile("testuser");
+      verify(userService).getProfile("testuser");
     }
 
     // ==================== POST /api/users/update-profile Tests ====================
