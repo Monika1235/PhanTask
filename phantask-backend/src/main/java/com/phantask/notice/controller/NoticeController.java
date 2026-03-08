@@ -184,8 +184,6 @@ public class NoticeController {
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<List<NoticeResponse>> myNotices(Authentication auth) {
 		try {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
             if (auth == null || !auth.isAuthenticated()) {
               throw new InsufficientAuthenticationException("Authentication required");
 			}
