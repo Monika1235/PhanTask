@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 
 import com.phantask.authentication.dto.AccountCreationResponse;
 import com.phantask.authentication.dto.AdminEditUserRequest;
@@ -83,11 +84,17 @@ public class UserController {
 		}
 		
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            }
 	        String role = req.getRole();
 	        AccountCreationResponse response = userService.createAccount(email, role);
 	        return ResponseEntity.ok(response);
 
-	    } catch (IllegalArgumentException ex) {
+	    } catch (AuthenticationException ae) {
+            throw ae;
+        } catch (IllegalArgumentException ex) {
 	        return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
 	    } catch (RuntimeException ex) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -144,7 +151,15 @@ public class UserController {
      */
     @GetMapping("/active")
     public ResponseEntity<List<UserResponse>> getAllActiveUsers() {
-        return ResponseEntity.ok(userService.getAllActiveUsers());
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            }
+			return ResponseEntity.ok(userService.getAllActiveUsers());
+		}catch (AuthenticationException ae) {
+            throw ae;
+        }
     }
 
     /**
