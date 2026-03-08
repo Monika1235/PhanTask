@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,8 +51,28 @@ public class NoticeController {
 	@PostMapping("/admin/create")
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<NoticeResponse> createNotice(@RequestBody CreateNoticeDTO dto) {
-		NoticeResponse resp = noticeService.createNotice(dto);
-		return ResponseEntity.ok(resp);
+	   try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            }
+            
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+		   NoticeResponse resp = noticeService.createNotice(dto);
+	       return ResponseEntity.ok(resp);
+	   }catch (AccessDeniedException ex) {
+            throw ex;
+        }catch (AuthenticationException ae) {
+            throw ae;
+        }
+	   
 	}
 
 	/**
