@@ -175,13 +175,13 @@ class UserControllerTest {
     }
 
     @Test
-    void createAccount_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void createAccount_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(post("/api/users/create-account")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(registerRequest)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(userService, never()).createAccount(anyString(), anyString());
     }
@@ -265,10 +265,10 @@ class UserControllerTest {
     }
 
     @Test
-    void getActiveUsers_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void getActiveUsers_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(get("/api/users/active"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(userService, never()).getAllActiveUsers();
     }
