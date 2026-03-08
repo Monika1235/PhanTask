@@ -49,7 +49,7 @@ import com.phantask.config.TestSecurityConfig;
  * Tests both admin operations (CRUD) and user operations (view by role/priority)
  */
 @WebMvcTest(NoticeController.class)
-@Import(TestSecurityConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 class NoticeControllerTest {
 
     @Autowired
