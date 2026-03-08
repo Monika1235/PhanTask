@@ -232,10 +232,10 @@ public ResponseEntity<String> updateProfileFirstLogin(
 	 */
 	@PostMapping(value = "/update-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> updateProfile(
-	        Authentication auth,
+	        @AuthenticationPrincipal UserDetails user,
 	        @ModelAttribute UpdateProfileRequest req) {
-
-	    return ResponseEntity.ok(userService.updateProfile(auth.getName(), req));
+		String username = user.getUsername();
+	    return ResponseEntity.ok(userService.updateProfile(username, req));
 	}
 
 
