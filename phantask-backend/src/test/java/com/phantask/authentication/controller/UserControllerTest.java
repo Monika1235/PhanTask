@@ -356,20 +356,19 @@ class UserControllerTest {
     // ==================== GET /api/users/profile Tests ====================
 
    @Test
+   @WithMockUser(username = "testuser")
    void getProfile_WithValidUser_ShouldReturn200() throws Exception {
-      // Arrange
+
       when(userService.getProfile("testuser")).thenReturn(userProfileResponse);
 
-      // Act & Assert
-      mockMvc.perform(get("/api/users/profile")
-            .with(user("testuser")))
+      mockMvc.perform(get("/api/users/profile"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.username").value("testuser"))
             .andExpect(jsonPath("$.email").value("test@example.com"))
             .andExpect(jsonPath("$.fullName").value("Test User"));
 
       verify(userService).getProfile("testuser");
-    }
+   }
 
     // ==================== POST /api/users/update-profile Tests ====================
 
