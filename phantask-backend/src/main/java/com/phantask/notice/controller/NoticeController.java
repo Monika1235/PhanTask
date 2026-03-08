@@ -98,13 +98,25 @@ public class NoticeController {
 	@DeleteMapping("/admin/delete/{id}")
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<String> deleteNotice(@PathVariable Long id) {
-		boolean deleted = noticeService.deleteNotice(id);
+		try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();            
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-		if (deleted) {
-			return ResponseEntity.ok("Notice deleted successfully");
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Notice not found");
-		}
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+			boolean deleted = noticeService.deleteNotice(id);
+
+		    if (deleted) {
+			 return ResponseEntity.ok("Notice deleted successfully");
+		    } else {
+			  return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Notice not found");
+		    }
+		}catch (AccessDeniedException ex) {
+            throw ex;
+        }	
 	}
 
 	/**
