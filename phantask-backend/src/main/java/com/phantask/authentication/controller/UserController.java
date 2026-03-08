@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.phantask.authentication.dto.AccountCreationResponse;
 import com.phantask.authentication.dto.AdminEditUserRequest;
@@ -246,7 +248,8 @@ public ResponseEntity<String> updateProfileFirstLogin(
 	 * @return 200 OK with a message describing the result of the password change
 	 */
 	@PostMapping("/change-password")
-	public ResponseEntity<String> changePassword(Authentication auth, @RequestBody PasswordChangeRequest req) {
-		return ResponseEntity.ok(userService.changePassword(auth.getName(), req));
+	public ResponseEntity<String> changePassword(@AuthenticationPrincipal UserDetails user, @RequestBody PasswordChangeRequest req) {
+		String username = user.getUsername();
+		return ResponseEntity.ok(userService.changePassword(username, req));
 	}
 }
