@@ -314,10 +314,10 @@ class NoticeControllerTest {
     }
 
     @Test
-    void getMyNotices_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void getMyNotices_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(get("/api/notices/my"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(noticeService, never()).getAllNoticesForUser(anyList());
     }
@@ -398,10 +398,10 @@ class NoticeControllerTest {
     }
 
     @Test
-    void getMyNoticesByPriority_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void getMyNoticesByPriority_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(get("/api/notices/my/priority/URGENT"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(noticeService, never()).getNoticesByPriorityForUser(anyList(), anyString());
     }
