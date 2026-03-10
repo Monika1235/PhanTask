@@ -67,26 +67,59 @@ public class TaskController {
 	@PutMapping("/admin/update/{id}")
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @RequestBody AdminTaskDTO dto) {
-		TaskResponse resp = taskService.updateTask(id, dto);
-		return ResponseEntity.ok(resp);
+		try {
+            auth = SecurityContextHolder.getContext().getAuthentication();        
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+		    TaskResponse resp = taskService.updateTask(id, dto);
+		    return ResponseEntity.ok(resp);
+		}catch (AccessDeniedException ex) {
+            throw ex;
+        }
 	}
 
 	@DeleteMapping("/admin/delete/{id}")
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<String> deleteTask(@PathVariable Long id) {
-		boolean deleted = taskService.deleteTask(id);
+		try {
+            auth = SecurityContextHolder.getContext().getAuthentication();        
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+		    boolean deleted = taskService.deleteTask(id);
 
-		if (deleted) {
-			return ResponseEntity.ok("Task deleted successfully");
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
-		}
+		    if (deleted) {
+			   return ResponseEntity.ok("Task deleted successfully");
+		    } else {
+			     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not found");
+		    }
+		}catch (AccessDeniedException ex) {
+            throw ex;
+        }
 	}
 
 	@GetMapping("/admin/all")
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<List<TaskResponse>> adminAll() {
-		return ResponseEntity.ok(taskService.getAllTasksAdmin());
+		try {
+            auth = SecurityContextHolder.getContext().getAuthentication();        
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+		    return ResponseEntity.ok(taskService.getAllTasksAdmin());
+		}catch (AccessDeniedException ex) {
+            throw ex;
+        }
 	}
 
 	// ----------------- EMPLOYEE endpoints -----------------
