@@ -122,7 +122,7 @@ class AttendanceControllerTest {
     // ==================== POST /api/attendance/mark Tests ====================
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void markAttendance_WithValidToken_ShouldReturn200() throws Exception {
         // Arrange
         String jsonRequest = "{\"token\":\"valid-token\"}";
@@ -143,7 +143,7 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "HR")
+    @WithMockUser(roles = "HR")
     void markAttendance_WithHRRole_ShouldReturn200() throws Exception {
         // Arrange
         String jsonRequest = "{\"token\":\"valid-token\"}";
@@ -159,7 +159,7 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "MANAGER")
+    @WithMockUser(roles = "MANAGER")
     void markAttendance_WithManagerRole_ShouldReturn200() throws Exception {
         // Arrange
         String jsonRequest = "{\"token\":\"valid-token\"}";
@@ -191,7 +191,7 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void markAttendance_WithEmptyToken_ShouldReturn400() throws Exception {
         // Arrange
         String jsonRequest = "{\"token\":\"\"}";
@@ -208,7 +208,7 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void markAttendance_WithNullToken_ShouldReturn400() throws Exception {
         // Arrange
         String jsonRequest = "{}";
@@ -223,7 +223,7 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void markAttendance_WithExpiredToken_ShouldReturn403() throws Exception {
         // Arrange
         String jsonRequest = "{\"token\":\"expired-token\"}";
@@ -240,7 +240,7 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void markAttendance_WithInvalidToken_ShouldReturn400() throws Exception {
         // Arrange
         String jsonRequest = "{\"token\":\"invalid-token\"}";
@@ -257,7 +257,7 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void markAttendance_WithServiceException_ShouldReturn500() throws Exception {
         // Arrange
         String jsonRequest = "{\"token\":\"valid-token\"}";
