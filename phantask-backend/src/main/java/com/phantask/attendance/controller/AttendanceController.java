@@ -16,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.core.Authentication;
 
 import com.phantask.attendance.dto.AttendancePercentageResponse;
 import com.phantask.attendance.dto.AttendanceReportRequest;
