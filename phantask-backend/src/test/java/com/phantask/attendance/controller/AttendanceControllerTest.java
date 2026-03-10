@@ -114,7 +114,7 @@ class AttendanceControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequest))
-        		.andExpect(status().isForbidden());
+        		.andExpect(status().isUnauthorized());
 
         verify(attendanceService, never()).registerQrToken(anyString());
     }
