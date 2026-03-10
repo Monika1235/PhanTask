@@ -152,13 +152,13 @@ class TaskControllerTest {
     }
 
     @Test
-    void createTask_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void createTask_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(post("/api/tasks/admin/create")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(adminTaskDTO)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(taskService, never()).createTask(any(AdminTaskDTO.class), anyString());
     }
@@ -334,10 +334,10 @@ class TaskControllerTest {
     }
 
     @Test
-    void getAllTasksForUser_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void getAllTasksForUser_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(get("/api/tasks/my"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(taskService, never()).getAllTasksForUser(anyString(), anyList());
     }
@@ -449,13 +449,13 @@ class TaskControllerTest {
     }
 
     @Test
-    void submitTask_WithoutAuthentication_ShouldReturn403() throws Exception {
+    void submitTask_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(put("/api/tasks/my/submit/1")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(employeeTaskDTO)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(taskService, never()).submitTask(anyLong(), any(EmployeeTaskDTO.class), anyString());
     }
