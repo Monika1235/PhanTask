@@ -102,9 +102,18 @@ public class TaskController {
 	@GetMapping("/my")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<List<TaskResponse>> myTasks(Authentication auth) {
-		String username = auth.getName();
-		List<String> roles = getRolesFromAuth(auth);
-		return ResponseEntity.ok(taskService.getAllTasksForUser(username, roles));
+		try {
+            auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            }
+			String username = auth.getName();
+		    List<String> roles = getRolesFromAuth(auth);
+		    return ResponseEntity.ok(taskService.getAllTasksForUser(username, roles));
+		}catch (AuthenticationException ae) {
+            throw ae;
+        }		
 	}
 
 	// Get pending tasks visible to logged-in user
