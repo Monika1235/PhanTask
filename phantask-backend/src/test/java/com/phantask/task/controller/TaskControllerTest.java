@@ -54,7 +54,7 @@ import com.phantask.config.TestSecurityConfig;
  * Tests both admin operations (CRUD) and employee operations (view/submit)
  */
 @WebMvcTest(TaskController.class)
-@Import(TestSecurityConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 class TaskControllerTest {
 
     @Autowired
