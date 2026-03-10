@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 
 import com.phantask.task.dto.AdminTaskDTO;
 import com.phantask.task.dto.EmployeeTaskDTO;
@@ -36,9 +40,28 @@ public class TaskController {
 	@PostMapping("/admin/create")
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<TaskResponse> createTask(@RequestBody AdminTaskDTO dto, Authentication auth) {
-		String admin = auth.getName();
-		TaskResponse resp = taskService.createTask(dto, admin);
-		return ResponseEntity.ok(resp);
+		try {
+            auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            }
+            
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+			String admin = auth.getName();
+		    TaskResponse resp = taskService.createTask(dto, admin);
+		    return ResponseEntity.ok(resp);
+		}catch (AccessDeniedException ex) {
+            throw ex;
+        }catch (AuthenticationException ae) {
+            throw ae;
+        }		
 	}
 
 	@PutMapping("/admin/update/{id}")
