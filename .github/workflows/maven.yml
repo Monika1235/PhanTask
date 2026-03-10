@@ -28,9 +28,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    # Run only service tests
+    # Run only controller tests
     - name: Run backend controller tests
-      run: mvn -Dtest=NoticeControllerTest test --file phantask-backend/pom.xml
+      run: mvn -Dtest=TaskControllerTest test --file phantask-backend/pom.xml
 
     # Build jar after tests pass
     - name: Build backend
