@@ -151,13 +151,15 @@ public class AttendanceController {
 
          try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        	boolean isAdmin = auth.getAuthorities()
-        	        .stream()
-        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        	boolean isAdminOrHr = auth.getAuthorities()
+                                   .stream()
+                                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") 
+                                     || a.getAuthority().equals("ROLE_HR"));
 
-        	if (!isAdmin) {
+        	if (!isAdminOrHr) {
         	    throw new AccessDeniedException("Forbidden");
         	}
+             
             List<AttendancePercentageResponse> data =
                 attendanceService.getAttendancePercentage(
                         request.getStartDate(),
