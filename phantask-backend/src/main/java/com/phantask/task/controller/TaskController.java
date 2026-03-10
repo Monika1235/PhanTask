@@ -120,9 +120,17 @@ public class TaskController {
 	@GetMapping("/my/submitted")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<List<TaskResponse>> mySubmitted(Authentication auth) {
-		String username = auth.getName();
-		List<String> roles = getRolesFromAuth(auth);
-		return ResponseEntity.ok(taskService.getSubmittedTasksForUser(username, roles));
+		try {
+            auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            } 
+			String username = auth.getName();
+		    List<String> roles = getRolesFromAuth(auth);
+		    return ResponseEntity.ok(taskService.getSubmittedTasksForUser(username, roles));
+		}catch (AuthenticationException ae) {
+            throw ae;
+        }		
 	}
 
 	// Submit task by logged in user (provide driveUrl)
@@ -131,6 +139,7 @@ public class TaskController {
 	public ResponseEntity<TaskResponse> submitTask(@PathVariable Long id, @RequestBody EmployeeTaskDTO dto,
 			Authentication auth) {
 		
+		auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth == null) {
          return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
