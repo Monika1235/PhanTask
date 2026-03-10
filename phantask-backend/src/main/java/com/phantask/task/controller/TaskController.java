@@ -68,7 +68,7 @@ public class TaskController {
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @RequestBody AdminTaskDTO dto) {
 		try {
-            auth = SecurityContextHolder.getContext().getAuthentication();        
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();        
         	boolean isAdmin = auth.getAuthorities()
         	        .stream()
         	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
@@ -86,7 +86,7 @@ public class TaskController {
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<String> deleteTask(@PathVariable Long id) {
 		try {
-            auth = SecurityContextHolder.getContext().getAuthentication();        
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();        
         	boolean isAdmin = auth.getAuthorities()
         	        .stream()
         	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
@@ -109,7 +109,7 @@ public class TaskController {
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
 	public ResponseEntity<List<TaskResponse>> adminAll() {
 		try {
-            auth = SecurityContextHolder.getContext().getAuthentication();        
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();        
         	boolean isAdmin = auth.getAuthorities()
         	        .stream()
         	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
