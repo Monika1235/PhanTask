@@ -68,6 +68,14 @@ public class AttendanceController {
             @RequestBody MarkAttendanceRequest request) {
 
         try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
             if (request.getToken() == null || request.getToken().isEmpty()) {
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "QR token is required"));
@@ -82,7 +90,9 @@ public class AttendanceController {
                 "attendance", new AttendanceResponse(attendance)
             ));
             
-        } catch (ExpiredJwtException e) {
+        } catch (AccessDeniedException ex) {
+            throw ex;
+        }catch (ExpiredJwtException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Map.of("error", "QR code expired. User needs to refresh."));
         } catch (JwtException e) {
