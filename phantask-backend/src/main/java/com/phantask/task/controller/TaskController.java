@@ -120,9 +120,18 @@ public class TaskController {
 	@GetMapping("/my/pending")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<List<TaskResponse>> myPending(Authentication auth) {
-		String username = auth.getName();
-		List<String> roles = getRolesFromAuth(auth);
-		return ResponseEntity.ok(taskService.getPendingTasksForUser(username, roles));
+		try {
+            auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            }
+			
+		    String username = auth.getName();
+		    List<String> roles = getRolesFromAuth(auth);
+		    return ResponseEntity.ok(taskService.getPendingTasksForUser(username, roles));
+		}catch (AuthenticationException ae) {
+            throw ae;
+        }
 	}
 
 	// Get submitted tasks visible to logged-in user
@@ -148,12 +157,16 @@ public class TaskController {
 	public ResponseEntity<TaskResponse> submitTask(@PathVariable Long id, @RequestBody EmployeeTaskDTO dto,
 			Authentication auth) {
 		
-		auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth == null) {
-         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-		String username = auth.getName();
-		TaskResponse resp = taskService.submitTask(id, dto, username);
-		return ResponseEntity.ok(resp);
+		try {
+            auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            } 
+			String username = auth.getName();
+		    TaskResponse resp = taskService.submitTask(id, dto, username);
+		    return ResponseEntity.ok(resp);
+		}catch (AuthenticationException ae) {
+            throw ae;
+        }	
 	}
 }
