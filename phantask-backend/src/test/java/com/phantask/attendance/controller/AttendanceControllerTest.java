@@ -295,7 +295,7 @@ class AttendanceControllerTest {
     void getMyAttendance_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(get("/api/attendance/my"))
-        		.andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(attendanceService, never()).getMyAttendance();
     }
@@ -340,7 +340,8 @@ class AttendanceControllerTest {
     void getMyAttendancePercentage_WithoutAuthentication_ShouldReturn401() throws Exception {
         // Act & Assert
         mockMvc.perform(get("/api/attendance/percentage/my"))
-        		.andExpect(status().isForbidden());
+        	    .andExpect(status().isUnauthorized());
+
     }
 
     // ==================== POST /api/attendance/percentage/download Tests ====================
