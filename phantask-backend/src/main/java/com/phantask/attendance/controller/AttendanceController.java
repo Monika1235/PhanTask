@@ -69,11 +69,13 @@ public class AttendanceController {
 
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        	boolean isAdmin = auth.getAuthorities()
-        	        .stream()
-        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        	boolean isAdminHrOrManager = auth.getAuthorities()
+                                              .stream()
+                                               .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") 
+                                                || a.getAuthority().equals("ROLE_HR")
+                                                || a.getAuthority().equals("ROLE_MANAGER"));
 
-        	if (!isAdmin) {
+        	if (!isAdminHrOrManager) {
         	    throw new AccessDeniedException("Forbidden");
         	}
             if (request.getToken() == null || request.getToken().isEmpty()) {
