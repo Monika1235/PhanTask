@@ -347,7 +347,7 @@ class AttendanceControllerTest {
     // ==================== POST /api/attendance/percentage/download Tests ====================
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void downloadAttendancePercentage_WithAdminRole_ShouldReturn200() throws Exception {
         // Arrange
         AttendanceReportRequest request = new AttendanceReportRequest();
@@ -381,7 +381,7 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "HR")
+    @WithMockUser(roles = "HR")
     void downloadAttendancePercentage_WithHRRole_ShouldReturn200() throws Exception {
         // Arrange
         AttendanceReportRequest request = new AttendanceReportRequest();
@@ -419,7 +419,7 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     void downloadAttendancePercentage_ShouldIncludeAllCSVColumns() throws Exception {
         // Arrange
         AttendanceReportRequest request = new AttendanceReportRequest();
