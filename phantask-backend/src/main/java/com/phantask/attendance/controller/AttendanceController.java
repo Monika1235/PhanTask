@@ -44,8 +44,16 @@ public class AttendanceController {
     public ResponseEntity<Void> registerToken(
             @RequestBody MarkAttendanceRequest request) {
 
-        attendanceService.registerQrToken(request.getToken());
-        return ResponseEntity.ok().build();
+         try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            }
+            attendanceService.registerQrToken(request.getToken());
+            return ResponseEntity.ok().build();
+         }catch (AuthenticationException ae) {
+            throw ae;
+        }
     }
     
     /**
