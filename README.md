@@ -107,3 +107,5 @@ Phantask isn’t just a project — it’s a production-style full-stack experie
 
 Built with care and real-world practices.
 If Phantask added value to you, don’t forget to ⭐ the repository!
+
+Also added the workflow script to automate Build, Test, and Deploy -> maven.yml
