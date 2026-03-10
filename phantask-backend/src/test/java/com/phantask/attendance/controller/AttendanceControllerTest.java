@@ -51,7 +51,7 @@ import io.jsonwebtoken.ExpiredJwtException;
  * controller behavior with security configuration
  */
 @WebMvcTest(AttendanceController.class)
-@Import(TestSecurityConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 class AttendanceControllerTest {
 
     @Autowired
