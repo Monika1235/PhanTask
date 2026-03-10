@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 
 import com.phantask.attendance.dto.AttendancePercentageResponse;
 import com.phantask.attendance.dto.AttendanceReportRequest;
@@ -96,7 +100,15 @@ public class AttendanceController {
     @GetMapping("/percentage/my")
     @PreAuthorize("isAuthenticated()")
     public AttendancePercentageResponse getMyAttendancePercentage() {
-        return attendanceService.getMyAttendancePercentage();
+         try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            }
+            return attendanceService.getMyAttendancePercentage();
+         }catch (AuthenticationException ae) {
+            throw ae;
+        }
     }
     
     /**
@@ -110,20 +122,32 @@ public class AttendanceController {
             @RequestBody AttendanceReportRequest request
     ) {
 
-        List<AttendancePercentageResponse> data =
+         try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        	boolean isAdmin = auth.getAuthorities()
+        	        .stream()
+        	        .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        	if (!isAdmin) {
+        	    throw new AccessDeniedException("Forbidden");
+        	}
+            List<AttendancePercentageResponse> data =
                 attendanceService.getAttendancePercentage(
                         request.getStartDate(),
                         request.getEndDate(),
                         request.getUserId()
                 );
 
-        String csv = buildCsv(data);
+            String csv = buildCsv(data);
 
-        return ResponseEntity.ok()
-                .header("Content-Disposition",
-                        "attachment; filename=attendance_percentage.csv")
-                .header("Content-Type", "text/csv")
-                .body(csv.getBytes());
+            return ResponseEntity.ok()
+                  .header("Content-Disposition",
+                         "attachment; filename=attendance_percentage.csv")
+                  .header("Content-Type", "text/csv")
+                  .body(csv.getBytes());
+         }catch (AccessDeniedException ex) {
+            throw ex;
+        }
     }
     
     private String buildCsv(List<AttendancePercentageResponse> data) {
