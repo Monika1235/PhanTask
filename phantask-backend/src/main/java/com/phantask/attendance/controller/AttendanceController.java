@@ -103,7 +103,15 @@ public class AttendanceController {
     @GetMapping("/my")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<Attendance>> myAttendance() {
-        return ResponseEntity.ok(attendanceService.getMyAttendance());
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated()) {
+              throw new InsufficientAuthenticationException("Authentication required");
+            }
+            return ResponseEntity.ok(attendanceService.getMyAttendance());
+        }catch (AuthenticationException ae) {
+            throw ae;
+        }
     }
     
     @GetMapping("/percentage/my")
