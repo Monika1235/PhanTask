@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+
+  mysql:
+    image: mysql:8
+    container_name: phantask-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cdac_db
+      MYSQL_USER: monika
+      MYSQL_PASSWORD: pingu17
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: ./phantask-backend
+    container_name: phantask-backend
+    depends_on:
+      - mysql
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cdac_db
+      SPRING_DATASOURCE_USERNAME: monika
+      SPRING_DATASOURCE_PASSWORD: pingu17
+
+  frontend:
+    build: ./phantask-frontend
+    container_name: phantask-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+
+volumes:
+  mysql_data:

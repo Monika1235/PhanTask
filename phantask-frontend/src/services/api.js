@@ -3,15 +3,17 @@ import axios from "axios";
 // Dynamically determine API URL based on current host
 const getApiBaseUrl = () => {
   //* In production (Vercel), use the production API
-  // if (window.location.hostname === "phantask.vercel.app") {
-  //   return "https://spring-monika-latest.onrender.com";
-  // }
+   if (window.location.hostname === "phantask.vercel.app") {
+      return "https://spring-monika-latest.onrender.com";
+   }
 
-  // For local development/testing (localhost or network IP)
-  // Use the same host as the frontend, but port 8080
-  const currentHost = window.location.hostname;
-  const protocol = window.location.protocol; // http: or https:
-  return `${protocol}//${currentHost}:8080/api`;
+  // 🐳 Docker (frontend container → backend container)
+  if (window.location.hostname !== "localhost") {
+    return "http://backend:8081/api";
+  }
+
+  // 💻 Local development (browser → localhost backend)
+  return "http://localhost:8081/api";
 };
 
 const API_BASE_URL = getApiBaseUrl();
