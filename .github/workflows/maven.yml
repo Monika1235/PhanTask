@@ -28,21 +28,5 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    # Run only controller tests
-    - name: Run backend controller tests
-      run: mvn -Dtest=AttendanceControllerTest test --file phantask-backend/pom.xml
-
-    # Build jar after tests pass
-    - name: Build backend
-      run: mvn -B clean package --file phantask-backend/pom.xml -DskipTests
-
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-       node-version: '18'
-
-    - name: Build frontend
-      run: |
-       cd phantask-frontend
-       npm install
-       npm run build
+    - name: Build backend (run all tests + create jar)
+      run: mvn -B clean package --file phantask-backend/pom.xml
