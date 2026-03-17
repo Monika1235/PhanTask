@@ -10,7 +10,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: cdac_db
       MYSQL_USER: monika
-      MYSQL_PASSWORD: pingu17
+      MYSQL_PASSWORD: root
     ports:
       - "3306:3306"
     volumes:
@@ -26,7 +26,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cdac_db
       SPRING_DATASOURCE_USERNAME: monika
-      SPRING_DATASOURCE_PASSWORD: pingu17
+      SPRING_DATASOURCE_PASSWORD: root
 
   frontend:
     build: ./phantask-frontend
