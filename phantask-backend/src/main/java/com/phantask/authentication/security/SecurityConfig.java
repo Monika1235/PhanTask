@@ -2,6 +2,7 @@ package com.phantask.authentication.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -12,7 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import org.springframework.web.cors.CorsConfigurationSource;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 /*
 Main Spring Security configuration class.
 
@@ -41,14 +43,18 @@ public class SecurityConfig {
        so token validation happens early in the request lifecycle.
    */
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter, CorsConfigurationSource corsConfigurationSource) throws Exception {
+    	System.out.println("🔥 SECURITY CONFIG LOADED");
         http
-        	.cors(cors -> {}) // enable CORS using CorsConfig
+            //.cors(cors -> cors.configurationSource(corsConfigurationSource)) // enable CORS using CorsConfig
+            .cors(cors -> {})
         	.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+            	.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll() // Allow registration & login
                 .requestMatchers("/api/users/change-password-first-login").permitAll() // Allow first-login change
                 .requestMatchers("/api/users/update-profile-first-login").permitAll()
+                .requestMatchers("/test").permitAll()
                 .anyRequest().authenticated() // Protect everything else
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -66,4 +72,5 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+    
 }

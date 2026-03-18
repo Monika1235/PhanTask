@@ -72,11 +72,19 @@ public class JwtFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
 			throws ServletException, IOException, java.io.IOException {
 
+		// 🔥 ADD THIS BLOCK (TOP)
+	    if ("OPTIONS".equalsIgnoreCase(req.getMethod())) {
+	    	System.out.println("❌ RETURNING EARLY (Expired Token) - " + req.getMethod());
+	        chain.doFilter(req, res);
+	        return;
+	    }
+	    
 		String path = req.getServletPath();
 
 		// Skip JWT validation for public endpoints
 		if (path.startsWith("/api/auth/") || path.equals("/api/users/change-password-first-login")
 				|| path.equals("/api/users/update-profile-first-login")) {
+			System.out.println("JWT FILTER: " + req.getMethod());
 			chain.doFilter(req, res);
 			return;
 		}
@@ -84,7 +92,9 @@ public class JwtFilter extends OncePerRequestFilter {
 		String header = req.getHeader("Authorization");
 		String username = null;
 		String token = null;
-
+		
+		System.out.println("JWT FILTER: " + req.getMethod());
+		
 		// Extract token from Authorization header
 		if (header != null && header.startsWith("Bearer ")) {
 			token = header.substring(7);
