@@ -1,40 +1,62 @@
-🚀 Running Phantask Locally
----------------------------
+# 🚀 Phantask - Full Stack Task Management Application
 
 Phantask is a full-stack application with a Spring Boot backend powering a React frontend. Both layers work independently but come together seamlessly to deliver a smooth task management experience.
 
-🧠 Backend Execution (Spring Boot)
-----------------------------------
+---
+
+## 🧱 Architecture Overview
+
+Frontend (React - Vite :5173)
+        ↓
+Backend (Spring Boot :9090 inside container)
+        ↓
+MySQL (3306 inside container)
+
+---
+
+## 🧠 Backend (Spring Boot)
 The backend is the brain of Phantask 🧠 — handling authentication, authorization, business logic, and data persistence.
+### ⚙️ Tech Stack
+- Java8 + Spring Boot
+- Spring Security (JWT-based authentication 🔐)
+- RESTful APIs
+- JPA / Hibernate
+- MySQL
+- Docker
+---
+### 🐳 Running with Docker
 
-⚙️ Tech Stack
--------------
-1. Java + Spring Boot
-2. Spring Security (JWT-based authentication 🔐)
-3. RESTful APIs
-4. JPA / Hibernate
-5. MySQL / PostgreSQL (configurable)
+- Step 1: Start all services
 
-▶️ How to Run the Backend
--------------------------
-1. Navigate to the backend project directory
-2. Configure your database credentials in application.properties
+$sudo docker-compose up --build
 
-Run the application:
---------------------
-./mvnw spring-boot:run
-or directly from your IDE ▶️
+- Step 2: Verify containers
 
-🌐 Backend Highlights
----------------------
-1. Secure login & role-based access (ADMIN / USER)
-2. Clean layered architecture (Controller → Service → Repository)
-3. DTO-based responses for safe data transfer
-4. Stateless JWT authentication for scalability 🚀
+$sudo docker ps
 
-Once started, the backend runs on:
----------------------------------
-👉 http://localhost:8080
+#### Expected containers:
+- phantask-mysql
+- phantask-backend
+- phantask-frontend
+
+- Step 3: Check backend logs
+  
+$sudo docker logs phantask-backend
+
+#### Look for:
+Tomcat initialized with port 9090
+
+👉 This confirms backend is running correctly inside container
+
+---
+### 🌐 Backend Highlights
+
+- Secure login & role-based access (ADMIN / USER)
+- Clean layered architecture (Controller → Service → Repository)
+- DTO-based responses for safe data transfer
+- Stateless JWT authentication for scalability
+
+---
 
 🎨 Frontend Execution (React)
 -----------------------------
@@ -47,12 +69,6 @@ The frontend is where Phantask comes to life ✨ — fast, responsive, and user-
 3. Axios for API calls
 4. Modern component-based UI
 
-▶️ How to Run the Frontend
---------------------------
-1. Navigate to the frontend project directory
-2. Install dependencies: npm install
-3. Start the development server: npm run dev
-
 🌟 Frontend Highlights
 ----------------------
 1. Clean and responsive UI 📱💻
@@ -60,27 +76,36 @@ The frontend is where Phantask comes to life ✨ — fast, responsive, and user-
 3. Secure token-based communication
 4. Smooth UX designed for productivity
 
-Frontend runs on:
-----------------
-👉 http://localhost:5173 (default Vite port)
+Open:
+----
+http://localhost:5173
 
-🌐 Running Frontend with Private IP (Multi-Device Support)
-----------------------------------------------------------
-Phantask’s frontend can be configured to run using a private IP address, allowing access from multiple devices (mobile, tablet, other laptops) on the same network 📱💻🌐.
-This is especially useful for real-world testing and demos.
+Test:
+-----
+Signup
+
+Login
+
+API calls in browser DevTools → Network tab
 
 👉 Find your private IP:
 -----------------------
 Linux / macOS: ip a or ifconfig
 Windows: ipconfig
 
-Expose Vite Dev Server to Network
----------------------------------
-Vite runs on localhost by default. To allow other devices to access it, expose the dev server using the --host flag.
-npm run dev -- --host
+Open:
+----
+http://<your-IP>:5173
 
-🚀 Now the frontend is accessible via:
-http://192.168.1.10:5173
+Mobile Testing:
+---------------
+Signup
+
+Login
+
+check logs via: 
+
+chrome://inspect/#devices
 
 🔗 How Frontend & Backend Work Together
 ---------------------------------------
