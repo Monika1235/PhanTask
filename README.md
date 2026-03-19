@@ -27,7 +27,7 @@ The backend is the brain of Phantask 🧠 — handling authentication, authoriza
 ### 🐳 Running with Docker
 
 - Step 1: Start all services
-
+```bash
 $sudo docker-compose up --build
 
 - Step 2: Verify containers
