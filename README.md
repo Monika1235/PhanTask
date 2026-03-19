@@ -7,6 +7,8 @@ Phantask is a full-stack application with a Spring Boot backend powering a React
 ![Docker](https://img.shields.io/badge/Docker-Containerized-blue?logo=docker)
 ![AWS](https://img.shields.io/badge/AWS-EC2-orange?logo=amazon-aws)
 ![Spring Boot](https://img.shields.io/badge/SpringBoot-Backend-green?logo=springboot)
+![Vite](https://img.shields.io/badge/Vite-Build-purple?logo=vite)
+![MySQL](https://img.shields.io/badge/Database-MySQL-blue?logo=mysql)
 
 http://65.0.74.98:5173/
 #### Demo Credentials:
