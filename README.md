@@ -3,14 +3,12 @@
 Phantask is a full-stack application with a Spring Boot backend powering a React frontend. Both layers work independently but come together seamlessly to deliver a smooth task management experience.
 
 ---
-```md
 ## 🧱 Architecture Overview
 
 ```mermaid
 flowchart TD
     A[🌐 Frontend<br/>React + Vite<br/>:5173] --> B[🧠 Backend<br/>Spring Boot<br/>:9090]
     B --> C[🗄️ MySQL<br/>:3306]
-```
 ```
 ---
 
