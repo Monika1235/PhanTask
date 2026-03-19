@@ -67,60 +67,55 @@ The frontend is where Phantask comes to life ✨ — fast, responsive, and user-
 - Axios for API calls
 - Modern component-based UI
 ---
-
 ### 🌟 Frontend Highlights
 - Clean and responsive UI 📱💻
 - Real-time interaction with backend APIs
 - Secure token-based communication
 - Smooth UX designed for productivity
-
 ---
-
 ## 🌐 Access Application
-
 - Local: http://localhost:5173  
-- Network (Mobile / Same WiFi): http://<your-IP>:5173
-
+- Network (Mobile / Same WiFi): http://192.168.1.4:5173
 ---
 ### Test:
-
 Signup, Login, API calls in browser DevTools → Network tab
-
 #### 👉 Find your private IP:
 ```
 - Linux / macOS: ip a or ifconfig
 - Windows: ipconfig
 ```
-Mobile Testing:
----------------
+### Mobile Testing:
 - Signup, Login
-- check logs via:
-  chrome://inspect/#devices
-
-🔗 How Frontend & Backend Work Together
----------------------------------------
+- debug via:
+  - chrome://inspect/#devices
+---
+## 🔗 How Frontend & Backend Work Together
 💡 The magic happens here:
-1. React sends API requests using Axios
-2. Spring Boot validates JWT tokens 🔐
-3. Backend responds with structured JSON data
-4. Frontend updates UI instantly ⚡
+- React sends API requests using Axios
+- Spring Boot validates JWT tokens 🔐
+- Backend responds with structured JSON data
+- Frontend updates UI instantly ⚡
+---
+## Both applications can run:
+- On the same machine
+- On different devices (as long as they’re on the same network 🌐)
+---
 
-Both applications can run:
--------------------------
-1. On the same machine
-2. On different devices (as long as they’re on the same network 🌐)
-
-🏆 Why Phantask?
-----------------
+### 🏆 Why Phantask?
 1. Real-world full-stack architecture
 2. Secure and scalable backend
 3. Modern frontend workflow
 4. Easy to run, easy to extend
 5. Perfect for learning and showcasing skills 💼
-
 Phantask isn’t just a project — it’s a production-style full-stack experience.
 
 Built with care and real-world practices.
 If Phantask added value to you, don’t forget to ⭐ the repository!
 
-Also added the workflow script to automate Build, Test, and Deploy -> maven.yml
+---
+## 🔄 CI/CD Pipeline
+Phantask includes a GitHub Actions workflow (`maven.yml`) to automate:
+- Build  
+- Test  
+- Deployment readiness  
+Workflow: `.github/workflows/maven.yml`
