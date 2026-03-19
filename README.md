@@ -15,11 +15,11 @@ flowchart TD
 ## 🧠 Backend (Spring Boot)
 The backend is the brain of Phantask 🧠 — handling authentication, authorization, business logic, and data persistence.
 ### ⚙️ Tech Stack
-- Java8 + Spring Boot
+- Java17 + Spring Boot3.5.7
 - Spring Security (JWT-based authentication 🔐)
 - RESTful APIs
 - JPA / Hibernate
-- MySQL
+- MySQL8
 - Docker
 ---
 ## 🐳 Running with Docker
@@ -76,21 +76,21 @@ The frontend is where Phantask comes to life ✨ — fast, responsive, and user-
 
 ---
 
-## Open:
-http://localhost:5173
+## 🌐 Access Application
 
-or 
+- Local: http://localhost:5173  
+- Network (Mobile / Same WiFi): http://<your-IP>:5173
 
-http://<your-IP>:5173 
-
+---
 ### Test:
 
 Signup, Login, API calls in browser DevTools → Network tab
 
 #### 👉 Find your private IP:
+```
 - Linux / macOS: ip a or ifconfig
 - Windows: ipconfig
-
+```
 Mobile Testing:
 ---------------
 - Signup, Login
