@@ -106,8 +106,9 @@ Signup, Login, API calls in browser DevTools → Network tab
 2. Secure and scalable backend
 3. Modern frontend workflow
 4. Easy to run, easy to extend
-5. Perfect for learning and showcasing skills 💼
-Phantask isn’t just a project — it’s a production-style full-stack experience.
+5. Perfect for learning and showcasing skills
+   
+💼 Phantask isn’t just a project — it’s a production-style full-stack experience.
 
 Built with care and real-world practices.
 If Phantask added value to you, don’t forget to ⭐ the repository!
@@ -118,4 +119,4 @@ Phantask includes a GitHub Actions workflow (`maven.yml`) to automate:
 - Build  
 - Test  
 - Deployment readiness  
-Workflow: `.github/workflows/maven.yml`
+Workflow: [maven.yml](.github/workflows/maven.yml)
