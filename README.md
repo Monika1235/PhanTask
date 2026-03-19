@@ -11,6 +11,7 @@ flowchart TD
     A[🌐 Frontend<br/>React + Vite<br/>:5173] --> B[🧠 Backend<br/>Spring Boot<br/>:9090]
     B --> C[🗄️ MySQL<br/>:3306]
 ```
+```
 ---
 
 ## 🧠 Backend (Spring Boot)
