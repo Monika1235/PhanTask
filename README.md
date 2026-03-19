@@ -9,9 +9,9 @@ Phantask is a full-stack application with a Spring Boot backend powering a React
 ![Spring Boot](https://img.shields.io/badge/SpringBoot-Backend-green?logo=springboot)
 
 http://http://65.0.74.98:5173/
-Demo Credentials:
-username: demo
-password: Temp@123
+#### Demo Credentials:
+- username: demo
+- password: Temp@123
 
 ---
 ## 🧱 Architecture Overview
