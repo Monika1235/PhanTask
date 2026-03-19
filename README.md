@@ -29,23 +29,24 @@ The backend is the brain of Phantask 🧠 — handling authentication, authoriza
 - Step 1: Start all services
 ```bash
 $sudo docker-compose up --build
-
+```
 - Step 2: Verify containers
-
+```bash
 $sudo docker ps
-
+```
 #### Expected containers:
-- phantask-mysql
-- phantask-backend
-- phantask-frontend
+-- phantask-mysql
+-- phantask-backend
+-- phantask-frontend
 
 - Step 3: Check backend logs
-  
+```bash
 $sudo docker logs phantask-backend
-
+```
 #### Look for:
+```bash
 Tomcat initialized with port 9090
-
+```
 👉 This confirms backend is running correctly inside container
 
 ---
