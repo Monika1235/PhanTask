@@ -10,7 +10,7 @@ Phantask is a full-stack application with a Spring Boot backend powering a React
 flowchart TD
     A[🌐 Frontend<br/>React + Vite<br/>:5173] --> B[🧠 Backend<br/>Spring Boot<br/>:9090]
     B --> C[🗄️ MySQL<br/>:3306]
-
+```
 ---
 
 ## 🧠 Backend (Spring Boot)
@@ -23,24 +23,25 @@ The backend is the brain of Phantask 🧠 — handling authentication, authoriza
 - MySQL
 - Docker
 ---
-### 🐳 Running with Docker
+## 🐳 Running with Docker
 
 - Step 1: Start all services
 ```bash
-$sudo docker-compose up --build
+sudo docker-compose up --build
 ```
 - Step 2: Verify containers
 ```bash
-$sudo docker ps
+sudo docker ps
 ```
-#### Expected containers:
--- phantask-mysql
--- phantask-backend
--- phantask-frontend
-
+### Expected containers:
+```
+phantask-mysql
+phantask-backend
+phantask-frontend
+```
 - Step 3: Check backend logs
 ```bash
-$sudo docker logs phantask-backend
+sudo docker logs phantask-backend
 ```
 #### Look for:
 ```bash
@@ -58,54 +59,44 @@ Tomcat initialized with port 9090
 
 ---
 
-🎨 Frontend Execution (React)
------------------------------
+## 🎨 Frontend(React)
+
 The frontend is where Phantask comes to life ✨ — fast, responsive, and user-friendly.
+### ⚙️ Tech Stack
+- React
+- Vite (⚡ lightning-fast dev server)
+- Axios for API calls
+- Modern component-based UI
+---
 
-⚙️ Tech Stack
--------------
-1. React
-2. Vite (⚡ lightning-fast dev server)
-3. Axios for API calls
-4. Modern component-based UI
+### 🌟 Frontend Highlights
+- Clean and responsive UI 📱💻
+- Real-time interaction with backend APIs
+- Secure token-based communication
+- Smooth UX designed for productivity
 
-🌟 Frontend Highlights
-----------------------
-1. Clean and responsive UI 📱💻
-2. Real-time interaction with backend APIs
-3. Secure token-based communication
-4. Smooth UX designed for productivity
+---
 
-Open:
-----
+## Open:
 http://localhost:5173
 
-Test:
------
-Signup
+or 
 
-Login
+http://<your-IP>:5173 
 
-API calls in browser DevTools → Network tab
+### Test:
 
-👉 Find your private IP:
------------------------
-Linux / macOS: ip a or ifconfig
-Windows: ipconfig
+Signup, Login, API calls in browser DevTools → Network tab
 
-Open:
-----
-http://<your-IP>:5173
+#### 👉 Find your private IP:
+- Linux / macOS: ip a or ifconfig
+- Windows: ipconfig
 
 Mobile Testing:
 ---------------
-Signup
-
-Login
-
-check logs via: 
-
-chrome://inspect/#devices
+- Signup, Login
+- check logs via:
+  chrome://inspect/#devices
 
 🔗 How Frontend & Backend Work Together
 ---------------------------------------
