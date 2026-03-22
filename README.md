@@ -133,3 +133,8 @@ Phantask includes a GitHub Actions workflow (`maven.yml`) to automate:
 - Test  
 - Deployment readiness  
 Workflow: [maven.yml](.github/workflows/maven.yml)
+
+---
+## 🚀 Future Improvements
+- Permission based access
+- Intelligent task assignment service with weighted tasks, burnout calculations and predictions.
